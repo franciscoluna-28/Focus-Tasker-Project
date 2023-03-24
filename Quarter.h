@@ -8,5 +8,6 @@ const int maxSubjectsPerQuarter = 7;
 // Estructura para el trimestre
 struct Quarter {
 	int quarterNumber;
+	int maxSubjects;
 	Subject subjects[maxSubjectsPerQuarter];
 };

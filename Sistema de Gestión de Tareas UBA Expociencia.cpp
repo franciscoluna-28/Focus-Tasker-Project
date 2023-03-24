@@ -13,7 +13,17 @@
 #include "SubjectsAndOptionsPerCareer.h"
 #include <ctime>
 #include <sstream>
-#include <limits>
+#include <windows.data.pdf.h>
+#include <hpdf.h>
+
+// COMANDOS 
+//git clone https ://github.com/Microsoft/vcpkg.git -> 
+// En una nueva carpeta dentro de c, llamada dev
+//cd vcpkg
+//bootstrap-vcpkg.bat
+//vcpkg integrate install
+//./vcpkg install libharu
+
 
 
 void showRedConsoleMessage() {
@@ -292,7 +302,8 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
 
  // Función para imprimir las tareas añadidas
  void showTasks(Quarter quarter) {
-     for (int i = 0; i < 7; i++) { // Recorre todas las materias en el trimestre
+     for (int i = 0; i < quarter.maxSubjects; i++) { // Recorre todas las materias en el trimestre
+         if(quarter.subjects[i].name != "") // Evita que se muestren materias vacias
          std::cout << "Tareas para " << quarter.subjects[i].name << ":" << quarter.subjects[i].numTasks << std::endl;
          for (int j = 0; j < quarter.subjects[i].numTasks; j++) { // Recorre todas las tareas de la materia actual
              Task task = quarter.subjects[i].tasks[j];
@@ -305,17 +316,16 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
      }
  }
 
- // Función para agregar tareas
-// Función para agregar tareas
+
 // Función para agregar tareas
  void addTasks(Quarter& quarter) {
-     for (int i = 0; i < 7; i++) { // Recorre todas las materias en el trimestre
+     for (int i = 0; i < quarter.maxSubjects; i++) { // Recorre todas las materias en el trimestre
          int taskAmount;
          std::cout << "Ingrese la cantidad de tareas para " << quarter.subjects[i].name << ": " << std::endl;
          while (!(std::cin >> taskAmount)) { // Mientras la entrada no sea un número, se seguirá pidiendo una cantidad de tareas válida
              std::cout << "Por favor, ingrese un número válido" << std::endl;
              std::cin.clear();
-             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+             while (std::cin.get() != '\n') {} // Limpiar el buffer de entrada para que no interfiera con la siguiente entrada de datos
          }
          std::cin.ignore(); // Limpiar el buffer de entrada para que no interfiera con la siguiente entrada de datos
 
@@ -358,7 +368,7 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
                          validPriority = true;
                      }
                  }
-                 catch (std::invalid_argument&) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
+                 catch (std::invalid_argument& e) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
                      std::cout << "La prioridad debe ser un número entre 1 y 5" << std::endl;
                  }
              }
@@ -368,15 +378,14 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
              quarter.subjects[i].numTasks++;
          }
      }
-
      showTasks(quarter);
  };
 
 
 
 
-
 // CONSTANTES A UTILIZAR POR EL SISTEMA
+
 const int MAX_QUARTERS = 12;
 const int subjectsWidth = 30; 
 const int creditsWidth = 10;
@@ -424,23 +433,23 @@ int main()
 
 
 
-    getCareerCreditsAndTrimester(MAX_QUARTERS,
-        userCareer, careerOptions, userQuarter);
+    //getCareerCreditsAndTrimester(MAX_QUARTERS,
+        //userCareer, careerOptions, userQuarter);
 
-    if (!userQuarter) exit(0);
+    //if (!userQuarter) exit(0);
 
-    if (isValidCareer(userCareer)) {
-        showCareerPathCredits = getShowCurrentCredits();
+    //if (isValidCareer(userCareer)) {
+        //showCareerPathCredits = getShowCurrentCredits();
 
-        std::cout << "trimestre: " << userQuarter << std::endl;
+        //std::cout << "trimestre: " << userQuarter << std::endl;
 
-        std::cout << "carrera: " << userCareer << std::endl;
+        //std::cout << "carrera: " << userCareer << std::endl;
 
-        std::cout << "opcion de ver créditos: " << showCareerPathCredits;
-    }
-    else {
-        std::cout << "La carrera ingresada no es válida. Por favor, ingrese una carrera válida.";
-    }
+        //std::cout << "opcion de ver créditos: " << showCareerPathCredits;
+    //}
+    //else {
+        //std::cout << "La carrera ingresada no es válida. Por favor, ingrese una carrera válida.";
+    //}
 
     //showCurrentCareerTable(userCareer, subjectsWidth, creditsWidth,
         //subjectsAndOptionsPerCareer, userQuarter, showCareerPathCredits);
@@ -449,9 +458,46 @@ int main()
     // en getCareerCreditsAndTrimester
 
     // Crear objeto Trimestre para las tareas
-    Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
-        .quarter[userQuarter - 1];
+    //Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
+        //.quarter[userQuarter - 1];
 
-    addTasks(studentSelectedQuarter);
+    //addTasks(studentSelectedQuarter);
+
+    // Crear un nuevo documento PDF
+    HPDF_Doc pdf = HPDF_New(NULL, NULL);
+    if (!pdf) {
+        printf("Error al crear el documento PDF\n");
+        return 1;
+    }
+
+    // Agregar una nueva página al documento
+    HPDF_Page page = HPDF_AddPage(pdf);
+    if (!page) {
+        printf("Error al agregar una página al documento\n");
+        HPDF_Free(pdf);
+        return 1;
+    }
+
+    // Configurar la fuente y el tamaño de la página
+    HPDF_Page_SetFontAndSize(page, HPDF_GetFont(pdf, "Helvetica", NULL), 12);
+
+    // Escribir el texto en la página
+    HPDF_Page_BeginText(page);
+    HPDF_Page_MoveTextPos(page, 50, 400);
+    HPDF_Page_ShowText(page, "¡Hola, mundo!");
+    HPDF_Page_EndText(page);
+
+    // Guardar el documento en un archivo
+    if (HPDF_SaveToFile(pdf, "documento.pdf") != HPDF_OK) {
+        printf("Error al guardar el documento PDF\n");
+        HPDF_Free(pdf);
+        return 1;
+    }
+
+    // Liberar la memoria utilizada por el documento PDF
+    HPDF_Free(pdf);
+
+    return 0;
 }
+
 
