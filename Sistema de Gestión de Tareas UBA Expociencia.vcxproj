@@ -133,6 +133,7 @@
     <ClInclude Include="GetCurrentDate.h" />
     <ClInclude Include="GuessNumberGame.h" />
     <ClInclude Include="ChangeConsoleTextFunctions.h" />
+    <ClInclude Include="SubjectsAndOptionsPerCareer.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="Quarter.h" />

@@ -8,7 +8,10 @@ public:
     void playGame() {
         int num, guess, tries = 0;
         int maxNum = getMaxNum();
-        srand(time(0)); // seed random number generator
+        srand(static_cast<unsigned int>(time(0))); // seed random number generator
+        // Se ha usado static_cast<unsigned int> para evitar la posible perdida de datos
+
+
         num = rand() % maxNum + 1; // random number between 1 and maxNum
         std::cout << "Guess My Number Game (1 - " << maxNum << ")\n\n";
 

@@ -10,6 +10,11 @@
 #include <vector>
 #include <Windows.h>
 #include "GuessNumberGame.h"
+#include "SubjectsAndOptionsPerCareer.h"
+#include <ctime>
+#include <sstream>
+#include <limits>
+
 
 void showRedConsoleMessage() {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -35,7 +40,17 @@ bool containsOnlyLetters(std::string const& str) {
         std::string::npos;
 }
 
-
+// Función para obtener unicamente la fecha actual
+std::string getCurrentDate() {
+    std::time_t now = std::time(nullptr);
+    std::tm tm_now;
+    localtime_s(&tm_now, &now);
+    std::ostringstream dateStream;
+    dateStream << tm_now.tm_year + 1900 << "-" <<
+        tm_now.tm_mon + 1 << "-" <<
+        tm_now.tm_mday;
+    return dateStream.str();
+}
 
 // Función para obtener un número entero válido dentro de un rango específico
 int getValidNumber(int min, int max,
@@ -65,6 +80,12 @@ int getValidNumber(int min, int max,
 // Vector con las respectivas carreras
 std::vector<std::string> careerOptions = { "Ingenieria de Sistemas",
 "Psicologia", "Ingenieria Electrica" };
+
+//MENCIONES
+// Ing. Sistemas - Inteligencia Artificial, Biomédica, programación
+// Psicología - Mención Clínica,
+
+
 
 // SELECCIÓN DE CARRERA Y OPCIONES DE CARRERA
 
@@ -151,6 +172,15 @@ bool getCareerCreditsAndTrimester(int maxQuarters, int& carreraUsuario,
 // getCareerCreditsAndTrimester y se asignará el valor devuelto
 // Función para ver los créditos (trigger)
 
+// Función para verificar si el número de la carrera es válido
+bool isValidCareer(int careerNumber) {
+    return (careerNumber >= 1 && careerNumber <= careerOptions.size()) ? true : false;
+}
+
+
+
+// TABLAS DE CARRERA
+
 // Función para mostrar los créditos en las tablas de la carrera
 bool getShowCurrentCredits() {
     char respuesta;
@@ -171,21 +201,195 @@ bool getShowCurrentCredits() {
     } while (true);
 }
 
-
-// Función para verificar si el número de la carrera es válido
-bool isValidCareer(int careerNumber) {
-    return (careerNumber >= 1 && careerNumber <= careerOptions.size()) ? true : false;
+// Función para imprimir el encabezado de la tabla
+void printTableHeader(int subjectNameWidth, int creditNumberWidth, bool showCredits = false) {
+    std::cout << std::left << std::setw(subjectNameWidth) << "Nombre de la Materia";
+    if (showCredits) {
+        std::cout << "|" << std::right << std::setw(creditNumberWidth) << "Creditos" << "|\n";
+    }
+    else {
+        std::cout << "\n";
+    }
 }
+
+// Función para imprimir una fila de la tabla con el nombre de la materia y los créditos correspondientes
+void printTableRow(const Subject& subject, int subjectNameWidth,
+    int creditNumberWidth, bool showCredits, int& totalCredits) {
+    std::cout << std::left << std::setw(subjectNameWidth) << subject.name;
+    if (showCredits) {
+        std::cout << "|" << std::right << std::setw(creditNumberWidth) << subject.credits << "|\n";
+        totalCredits += subject.credits;
+    }
+    else {
+        std::cout << "\n";
+    }
+}
+
+// Función para imprimir la fila de total de créditos
+ void printTotalCreditsRow(int subjectNameWidth, int creditNumberWidth, int totalCredits) {
+        std::cout << std::left << std::setw(subjectNameWidth) << "Total de Creditos" << "|";
+        std::cout << std::right << std::setw(creditNumberWidth) << totalCredits << "|\n";
+    }
+
+// Función para mostrar la tabla de la carrera
+ void showCurrentCareerTable(int careerNumber, int subjectNameWidth, int creditNumberWidth,
+     const Career* careers, int selectedUserQuarter, bool showCredits) {
+
+     const Career& career = careers[careerNumber - 1];
+     std::cout << "Carrera: " << career.name << "\n\n";
+
+     // Mostrar menú de selección
+     std::string selection = "";
+     bool showAllQuarters = false;
+
+     while (selection != "s" && selection != "n") {
+         std::cout << "Desea ver todos los trimestres? (s/n): ";
+         std::cin >> selection;
+         if (selection == "s") {
+             showAllQuarters = true;
+         }
+         else if (selection == "n") {
+             showAllQuarters = false;
+         }
+         else {
+             std::cout << "Por favor, ingrese una opción válida.\n";
+         }
+     }
+
+     for (const Quarter& quarter : career.quarter) {
+         if (showAllQuarters || quarter.quarterNumber == selectedUserQuarter) {
+
+             int nonEmptySubjects = 0;
+             for (const Subject& subject : quarter.subjects) {
+                 if (!subject.name.empty()) {
+                     nonEmptySubjects++;
+                 }
+             }
+
+             // Solo mostrar los trimestres que tengan materias
+             if (nonEmptySubjects > 0) {
+                 std::cout << "Trimestre " << quarter.quarterNumber << ":\n";
+
+                 printTableHeader(subjectNameWidth, creditNumberWidth);
+
+                 int totalCredits = 0;
+                 for (const Subject& subject : quarter.subjects) {
+                     if (!subject.name.empty()) {
+                         printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
+                     }
+                 }
+
+                 printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits);
+
+                 std::cout << "\n";
+             }
+         }
+     }
+ }
+
+
+ // AÑADIR TAREAS
+
+ // Función para imprimir las tareas añadidas
+ void showTasks(Quarter quarter) {
+     for (int i = 0; i < 7; i++) { // Recorre todas las materias en el trimestre
+         std::cout << "Tareas para " << quarter.subjects[i].name << ":" << quarter.subjects[i].numTasks << std::endl;
+         for (int j = 0; j < quarter.subjects[i].numTasks; j++) { // Recorre todas las tareas de la materia actual
+             Task task = quarter.subjects[i].tasks[j];
+             std::cout << "Nombre de la tarea: " << task.taskName << std::endl;
+             std::cout << "Fecha de entrega: " << task.deliveryDate << std::endl;
+             std::cout << "Descripción: " << task.description << std::endl;
+             std::cout << "Prioridad: " << task.priority << std::endl;
+             std::cout << std::endl;
+         }
+     }
+ }
+
+ // Función para agregar tareas
+// Función para agregar tareas
+// Función para agregar tareas
+ void addTasks(Quarter& quarter) {
+     for (int i = 0; i < 7; i++) { // Recorre todas las materias en el trimestre
+         int taskAmount;
+         std::cout << "Ingrese la cantidad de tareas para " << quarter.subjects[i].name << ": " << std::endl;
+         while (!(std::cin >> taskAmount)) { // Mientras la entrada no sea un número, se seguirá pidiendo una cantidad de tareas válida
+             std::cout << "Por favor, ingrese un número válido" << std::endl;
+             std::cin.clear();
+             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+         }
+         std::cin.ignore(); // Limpiar el buffer de entrada para que no interfiera con la siguiente entrada de datos
+
+         if (taskAmount > 4) { // Si la cantidad de tareas es mayor a 4, se establece a 4
+             taskAmount = 4;
+         }
+
+         for (int j = 0; j < taskAmount; j++) { // Ingresa los detalles de cada tarea
+             Task task;
+             task.taskName = "";
+             task.currentDate = "";
+             task.deliveryDate = "";
+             task.description = "";
+             task.priority = 0;
+
+             std::cout << "Ingrese el nombre de la tarea: ";
+             std::getline(std::cin, task.taskName);
+
+             std::cout << "Fecha de creación de la tarea " << getCurrentDate() << std::endl;
+
+             std::cout << "Ingrese la fecha de entrega de la tarea (formato DD/MM/AAAA): ";
+             std::getline(std::cin, task.deliveryDate);
+
+             std::cout << "Ingrese una descripcion de la tarea: ";
+             std::getline(std::cin, task.description);
+
+             bool validPriority = false;
+             while (!validPriority) { // Mientras la entrada no sea válida, se seguirá pidiendo una prioridad válida
+                 std::cout << "Ingrese la prioridad de la tarea (1 a 5): ";
+                 std::string priorityStr;
+                 std::getline(std::cin, priorityStr);
+
+                 try {
+                     int priority = std::stoi(priorityStr);
+                     if (priority < 1 || priority > 5) { // Si la prioridad está fuera del rango permitido, se pide al usuario que ingrese una prioridad válida
+                         std::cout << "La prioridad debe ser un número entre 1 y 5" << std::endl;
+                     }
+                     else { // Si la prioridad es válida, se establece en la tarea actual
+                         task.priority = priority;
+                         validPriority = true;
+                     }
+                 }
+                 catch (std::invalid_argument&) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
+                     std::cout << "La prioridad debe ser un número entre 1 y 5" << std::endl;
+                 }
+             }
+
+             // Agrega la tarea a la materia actual
+             quarter.subjects[i].tasks[j] = task;
+             quarter.subjects[i].numTasks++;
+         }
+     }
+
+     showTasks(quarter);
+ };
+
+
+
+
 
 // CONSTANTES A UTILIZAR POR EL SISTEMA
 const int MAX_QUARTERS = 12;
+const int subjectsWidth = 30; 
+const int creditsWidth = 10;
+
+// Los valores de subjectsWidth y creditsWidth, indican
+// el ancho de campo
 
 // VARIABLES DADAS POR EL USUARIO
 int userQuarter;
 bool showCareerPathCredits;
 int userCareer;
 int mainMenuUserChoice;
-
+int maxCareersLimit;
 
 
 
@@ -195,21 +399,19 @@ int main()
     // Se imprimen las opciones a mostrar para la carrera del usuario
 
     // Menú para el sistema
-    std::cout << "Bienvenido! Que desea hacer?" << std::endl;
-    std::cout << "Presione '1' y 'enter' para entrar al sistema de gestión de tareas por trimestre" << std::endl;
-    std::cout << "Presione '2' y 'enter' para ver los pensum disponibles" << std::endl;
-    std::cout << "Presione '3' y 'enter' para ver las preguntas frecuentes (FAQ)" << std::endl;
-    std::cout << "Presione '4' y 'enter' para utilizar un pomodoro" << std::endl;
-    std::cout << "Estresado por los estudios?, puedes jugar a adivinar un número contra el sistema presionando '5' y 'enter'" << std::endl;
-    std::cin >> mainMenuUserChoice;
+    //std::cout << "Bienvenido! Que desea hacer?" << std::endl;
+    //std::cout << "Presione '1' y 'enter' para entrar al sistema de gestión de tareas por trimestre" << std::endl;
+    //std::cout << "Presione '2' y 'enter' para ver los pensum disponibles" << std::endl;
+    //std::cout << "Presione '3' y 'enter' para ver las preguntas frecuentes (FAQ)" << std::endl;
+    //std::cout << "Presione '4' y 'enter' para utilizar un pomodoro" << std::endl;
+    //std::cout << "Estresado por los estudios?, puedes jugar a adivinar un número contra el sistema presionando '5' y 'enter'" << std::endl;
+    //std::cin >> mainMenuUserChoice;
 
-    switch(mainMenuUserChoice){
-        case 5:
-            GuessNumberGame game;
-            game.playGame();
-    }
-
-
+    //switch(mainMenuUserChoice){
+        //case 5:
+            //GuessNumberGame game;
+            //game.playGame();
+    //}
 
 
 
@@ -220,8 +422,10 @@ int main()
 
 
 
-    //getCareerCreditsAndTrimester(MAX_QUARTERS,
-        //userCareer, careerOptions, userQuarter);
+
+
+    getCareerCreditsAndTrimester(MAX_QUARTERS,
+        userCareer, careerOptions, userQuarter);
 
     if (!userQuarter) exit(0);
 
@@ -238,8 +442,16 @@ int main()
         std::cout << "La carrera ingresada no es válida. Por favor, ingrese una carrera válida.";
     }
 
+    //showCurrentCareerTable(userCareer, subjectsWidth, creditsWidth,
+        //subjectsAndOptionsPerCareer, userQuarter, showCareerPathCredits);
 
+    // Se crea la estructura para el trimestre de acuerdo a los datos dados 
+    // en getCareerCreditsAndTrimester
 
-    
+    // Crear objeto Trimestre para las tareas
+    Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
+        .quarter[userQuarter - 1];
+
+    addTasks(studentSelectedQuarter);
 }
 

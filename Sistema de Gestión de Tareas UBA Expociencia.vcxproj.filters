@@ -44,5 +44,8 @@
     <ClInclude Include="ChangeConsoleTextFunctions.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="SubjectsAndOptionsPerCareer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
