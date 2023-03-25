@@ -1,7 +1,6 @@
 // Sistema de Gestión de Tareas UBA Expociencia.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
 //
 
-
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,8 +12,9 @@
 #include "SubjectsAndOptionsPerCareer.h"
 #include <ctime>
 #include <sstream>
-#include <windows.data.pdf.h>
 #include <hpdf.h>
+
+
 
 // COMANDOS 
 //git clone https ://github.com/Microsoft/vcpkg.git -> 
@@ -94,8 +94,6 @@ std::vector<std::string> careerOptions = { "Ingenieria de Sistemas",
 //MENCIONES
 // Ing. Sistemas - Inteligencia Artificial, Biomédica, programación
 // Psicología - Mención Clínica,
-
-
 
 // SELECCIÓN DE CARRERA Y OPCIONES DE CARRERA
 
@@ -186,7 +184,6 @@ bool getCareerCreditsAndTrimester(int maxQuarters, int& carreraUsuario,
 bool isValidCareer(int careerNumber) {
     return (careerNumber >= 1 && careerNumber <= careerOptions.size()) ? true : false;
 }
-
 
 
 // TABLAS DE CARRERA
@@ -296,17 +293,112 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
          }
      }
  }
+ // Esta función incluye selección de (s/n)
+
+
+ // Función para unicamente mostrar la tabla del trimestre actual
+ // para las tareas
+ void showCurrentQuarterSubjects(const Quarter& quarter, int subjectNameWidth, int creditNumberWidth, bool showCredits) {
+
+     int nonEmptySubjects = 0;
+     for (const Subject& subject : quarter.subjects) {
+         if (!subject.name.empty()) {
+             nonEmptySubjects++;
+         }
+     }
+
+     // Solo mostrar el trimestre actual si tiene materias
+     if (nonEmptySubjects > 0) {
+         std::cout << "\nTrimestre " << quarter.quarterNumber << ":\n";
+
+         printTableHeader(subjectNameWidth, creditNumberWidth);
+
+         int totalCredits = 0;
+         for (const Subject& subject : quarter.subjects) {
+             if (!subject.name.empty()) {
+                 printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
+             }
+         }
+
+         printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits);
+
+         std::cout << "\n";
+     }
+ }
 
 
  // AÑADIR TAREAS
 
+
+// Función para convertir a PDF
+ void generatePDF(Quarter quarter) {
+     HPDF_Doc pdf = HPDF_New(NULL, NULL);
+     HPDF_STATUS status;
+     HPDF_Page page = HPDF_AddPage(pdf);
+     status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+     if (status != HPDF_OK) {
+         std::cerr << "Error al establecer el tamaño de la página" << std::endl;
+         HPDF_Free(pdf);
+         return;
+     }
+     HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
+     HPDF_Page_SetFontAndSize(page, font, 12);
+     HPDF_Page_BeginText(page);
+     HPDF_Page_MoveTextPos(page, 50, 750);
+     HPDF_Page_ShowText(page, "Lista de tareas");
+     HPDF_Page_MoveTextPos(page, 0, -20);
+     int numLines = 0;
+     for (int i = 0; i < quarter.maxSubjects; i++) {
+         if (quarter.subjects[i].name != "") {
+             HPDF_Page_ShowText(page, (std::string("Tareas para ") + quarter.subjects[i].name).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+         }
+         for (int j = 0; j < quarter.subjects[i].numTasks; j++) {
+             Task task = quarter.subjects[i].tasks[j];
+             HPDF_Page_ShowText(page, (std::string("Tarea #") + std::to_string(j + 1)).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             HPDF_Page_ShowText(page, (std::string("Nombre de la tarea: ") + task.taskName).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             HPDF_Page_ShowText(page, (std::string("Fecha de entrega: ") + task.deliveryDate).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             HPDF_Page_ShowText(page, (std::string("Descripción: ") + task.description).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             HPDF_Page_ShowText(page, (std::string("Prioridad: ") + std::to_string(task.priority)).c_str());
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             HPDF_Page_ShowText(page, "----------------------------------------");
+             HPDF_Page_MoveTextPos(page, 0, -20);
+             numLines += 7;
+             if (numLines >= 35
+                 ) {
+                 HPDF_Page_EndText(page);
+                 page = HPDF_AddPage(pdf);
+                 status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+                 if (status != HPDF_OK) {
+                     std::cerr << "Error al establecer el tamaño de la página" << std::endl;
+                     HPDF_Free(pdf);
+                     return;
+                 }
+                 HPDF_Page_SetFontAndSize(page, font, 12);
+                 HPDF_Page_BeginText(page);
+                 HPDF_Page_MoveTextPos(page, 50, 750);
+                 numLines = 0;
+             }
+         }
+     }
+     HPDF_Page_EndText(page);
+     HPDF_SaveToFile(pdf, "task_list.pdf");
+     HPDF_Free(pdf);
+ }
+
  // Función para imprimir las tareas añadidas
  void showTasks(Quarter quarter) {
+     showDefaultColorConsoleMessage();
      for (int i = 0; i < quarter.maxSubjects; i++) { // Recorre todas las materias en el trimestre
          if(quarter.subjects[i].name != "") // Evita que se muestren materias vacias
          std::cout << "Tareas para " << quarter.subjects[i].name << ":" << quarter.subjects[i].numTasks << std::endl;
          for (int j = 0; j < quarter.subjects[i].numTasks; j++) { // Recorre todas las tareas de la materia actual
              Task task = quarter.subjects[i].tasks[j];
+             std::cout << "Tarea #" << j + 1 << std::endl;
              std::cout << "Nombre de la tarea: " << task.taskName << std::endl;
              std::cout << "Fecha de entrega: " << task.deliveryDate << std::endl;
              std::cout << "Descripción: " << task.description << std::endl;
@@ -316,22 +408,27 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
      }
  }
 
-
 // Función para agregar tareas
  void addTasks(Quarter& quarter) {
+
+     showDefaultColorConsoleMessage();
      for (int i = 0; i < quarter.maxSubjects; i++) { // Recorre todas las materias en el trimestre
          int taskAmount;
-         std::cout << "Ingrese la cantidad de tareas para " << quarter.subjects[i].name << ": " << std::endl;
+         std::cout << "\nIngrese la cantidad de tareas para " << quarter.subjects[i].name << ": " << "(Maximo de 4)" << std::endl;
          while (!(std::cin >> taskAmount)) { // Mientras la entrada no sea un número, se seguirá pidiendo una cantidad de tareas válida
-             std::cout << "Por favor, ingrese un número válido" << std::endl;
+             showRedConsoleMessage();
+             std::cout << "\n Por favor, ingrese un número válido" << std::endl;
+                
              std::cin.clear();
              while (std::cin.get() != '\n') {} // Limpiar el buffer de entrada para que no interfiera con la siguiente entrada de datos
          }
          std::cin.ignore(); // Limpiar el buffer de entrada para que no interfiera con la siguiente entrada de datos
 
          if (taskAmount > 4) { // Si la cantidad de tareas es mayor a 4, se establece a 4
+             std::cout << "\nValor superior al establecido, estableciendo su límite de tareas 4..." << std::endl;
              taskAmount = 4;
          }
+
 
          for (int j = 0; j < taskAmount; j++) { // Ingresa los detalles de cada tarea
              Task task;
@@ -340,28 +437,31 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
              task.deliveryDate = "";
              task.description = "";
              task.priority = 0;
+             std::cout << "\nTarea # " << j + 1;
 
-             std::cout << "Ingrese el nombre de la tarea: ";
+             std::cout << "\nIngrese el nombre de la tarea: ";
              std::getline(std::cin, task.taskName);
 
-             std::cout << "Fecha de creación de la tarea " << getCurrentDate() << std::endl;
+             std::cout << "\nFecha de creación de la tarea " << getCurrentDate() << std::endl;
 
-             std::cout << "Ingrese la fecha de entrega de la tarea (formato DD/MM/AAAA): ";
+             std::cout << "\nIngrese la fecha de entrega de la tarea (formato DD/MM/AAAA): ";
              std::getline(std::cin, task.deliveryDate);
 
-             std::cout << "Ingrese una descripcion de la tarea: ";
+             std::cout << "\nIngrese una descripcion de la tarea: ";
              std::getline(std::cin, task.description);
 
              bool validPriority = false;
              while (!validPriority) { // Mientras la entrada no sea válida, se seguirá pidiendo una prioridad válida
-                 std::cout << "Ingrese la prioridad de la tarea (1 a 5): ";
+                 showDefaultColorConsoleMessage();
+                 std::cout << "\nIngrese la prioridad de la tarea (1 a 5): ";
                  std::string priorityStr;
                  std::getline(std::cin, priorityStr);
 
                  try {
                      int priority = std::stoi(priorityStr);
                      if (priority < 1 || priority > 5) { // Si la prioridad está fuera del rango permitido, se pide al usuario que ingrese una prioridad válida
-                         std::cout << "La prioridad debe ser un número entre 1 y 5" << std::endl;
+                         showRedConsoleMessage();
+                         std::cout << "\nLa prioridad debe ser un número entre 1 y 5" << std::endl;
                      }
                      else { // Si la prioridad es válida, se establece en la tarea actual
                          task.priority = priority;
@@ -369,20 +469,18 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
                      }
                  }
                  catch (std::invalid_argument& e) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
-                     std::cout << "La prioridad debe ser un número entre 1 y 5" << std::endl;
+                     showRedConsoleMessage();
+                     std::cout << "\nLa prioridad debe ser un número entre 1 y 5" << std::endl;
                  }
              }
 
+             showDefaultColorConsoleMessage();
              // Agrega la tarea a la materia actual
              quarter.subjects[i].tasks[j] = task;
              quarter.subjects[i].numTasks++;
          }
      }
-     showTasks(quarter);
  };
-
-
-
 
 // CONSTANTES A UTILIZAR POR EL SISTEMA
 
@@ -399,8 +497,6 @@ bool showCareerPathCredits;
 int userCareer;
 int mainMenuUserChoice;
 int maxCareersLimit;
-
-
 
 int main()
 {
@@ -422,24 +518,14 @@ int main()
             //game.playGame();
     //}
 
+    // Se le pediría al usuario que ingrese su carrera y trimestre
+    getCareerCreditsAndTrimester(MAX_QUARTERS,
+        userCareer, careerOptions, userQuarter);
 
+    if (!userQuarter) exit(0);
 
-
-
-
-
-
-
-
-
-
-    //getCareerCreditsAndTrimester(MAX_QUARTERS,
-        //userCareer, careerOptions, userQuarter);
-
-    //if (!userQuarter) exit(0);
-
-    //if (isValidCareer(userCareer)) {
-        //showCareerPathCredits = getShowCurrentCredits();
+    if (isValidCareer(userCareer)) {
+        showCareerPathCredits = getShowCurrentCredits();
 
         //std::cout << "trimestre: " << userQuarter << std::endl;
 
@@ -458,46 +544,50 @@ int main()
     // en getCareerCreditsAndTrimester
 
     // Crear objeto Trimestre para las tareas
-    //Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
-        //.quarter[userQuarter - 1];
+        Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
+            .quarter[userQuarter - 1];
 
-    //addTasks(studentSelectedQuarter);
 
-    // Crear un nuevo documento PDF
-    HPDF_Doc pdf = HPDF_New(NULL, NULL);
-    if (!pdf) {
-        printf("Error al crear el documento PDF\n");
-        return 1;
+        std::cout << "A continuacion, se muestra la respectiva tabla de las materias del trimestre que cursa actualmente" << std::endl;
+
+        //Se muestra la tabla de materias trimestre actual
+        showCurrentQuarterSubjects(studentSelectedQuarter, subjectsWidth, creditsWidth,
+            showCareerPathCredits);
+
+        // Se ejecuta la función para añadir tareas
+        addTasks(studentSelectedQuarter);
+
+        int a;
+
+
+
+        // Menú despúes de realizar la selección de tareas
+        std::cout << "Usuario, que desea hacer?" << std::endl;
+        std::cout << "presione 1 para crear un pdf con las tareas añadidas" << std::endl;
+        std::cout << "presione 2 para ver las tareas añadidas" << std::endl;
+        std::cin >> a;
+
+        switch (a)
+        {
+        case 1:
+            generatePDF(studentSelectedQuarter);
+            std::cout << "PDF generado exitosamente!";
+            break;
+
+        case 2:
+            showTasks(studentSelectedQuarter);
+            int exitValue;
+
+
+            std::cin >> exitValue;
+
+        default:
+            break;
+        }
+
+
+        return 0;
     }
-
-    // Agregar una nueva página al documento
-    HPDF_Page page = HPDF_AddPage(pdf);
-    if (!page) {
-        printf("Error al agregar una página al documento\n");
-        HPDF_Free(pdf);
-        return 1;
-    }
-
-    // Configurar la fuente y el tamaño de la página
-    HPDF_Page_SetFontAndSize(page, HPDF_GetFont(pdf, "Helvetica", NULL), 12);
-
-    // Escribir el texto en la página
-    HPDF_Page_BeginText(page);
-    HPDF_Page_MoveTextPos(page, 50, 400);
-    HPDF_Page_ShowText(page, "¡Hola, mundo!");
-    HPDF_Page_EndText(page);
-
-    // Guardar el documento en un archivo
-    if (HPDF_SaveToFile(pdf, "documento.pdf") != HPDF_OK) {
-        printf("Error al guardar el documento PDF\n");
-        HPDF_Free(pdf);
-        return 1;
-    }
-
-    // Liberar la memoria utilizada por el documento PDF
-    HPDF_Free(pdf);
-
-    return 0;
 }
 
 
