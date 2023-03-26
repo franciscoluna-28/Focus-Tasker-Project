@@ -13,6 +13,8 @@
 #include <ctime>
 #include <sstream>
 #include <hpdf.h>
+#include <algorithm>
+#undef max
 
 
 
@@ -150,7 +152,8 @@ int getCareerSelection(std::vector<std::string> possibleCareerOptions) {
 
 // Función para imprimir las opciones de selección de carrera
 void showCareerOptions(const std::vector<std::string>& possibleCareerOptions) {
-    std::cout << "------------------------------------------------------------" << std::endl;
+    showDefaultColorConsoleMessage();
+    std::cout << "\n------------------------------------------------------------" << std::endl;
     std::cout << "Por favor, indique la carrera que actualmente está cursando" << std::endl;
     for (int i = 0; i < possibleCareerOptions.size(); i++) {
         std::cout << "Escriba '" << i + 1 << "' para elegir " << possibleCareerOptions[i] << std::endl;
@@ -327,7 +330,7 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
  }
 
 
- // AÑADIR TAREAS
+ // AÑADIR TAREAS Y CONVERTIR A PDF
 
 
 // Función para convertir a PDF
@@ -468,7 +471,7 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
                          validPriority = true;
                      }
                  }
-                 catch (std::invalid_argument& e) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
+                 catch (std::invalid_argument&) { // Si la entrada no es un número, se pide al usuario que ingrese una prioridad válida
                      showRedConsoleMessage();
                      std::cout << "\nLa prioridad debe ser un número entre 1 y 5" << std::endl;
                  }
@@ -482,6 +485,131 @@ void printTableRow(const Subject& subject, int subjectNameWidth,
      }
  };
 
+
+ // REGISTRAR USUARIO
+
+ // Función para validar strings únicamente con letras
+ bool isValidString(const std::string& string)
+ {
+     for (char c : string) {
+         if (!std::isalpha(c)) {
+             return false;
+         }
+     }
+     return true;
+ }
+
+
+
+ // Función para obtener un nombre o apellido válido
+ std::string insertValidNameOrLastName(std::string stringToValidate, std::string insertMessage,
+     std::string warningMessage, std::string sucessMessage) {
+
+     showDefaultColorConsoleMessage();
+     bool isStringValid = false;
+     while (!isStringValid) {
+         showDefaultColorConsoleMessage();
+         std::cout << insertMessage;
+         std::cin >> stringToValidate;
+
+         showGreenConsoleMessage();
+         if (isValidString(stringToValidate)) {
+             isStringValid = true;
+             std::cout << sucessMessage;
+         }
+         else {
+             showRedConsoleMessage();
+             std::cout << warningMessage;
+             char answer;
+             std::cin >> answer;
+             if (answer == 'n' || answer == 'N') {
+                 break;
+             }
+         }
+     }
+
+     showDefaultColorConsoleMessage();
+     return stringToValidate;
+ }
+ 
+
+ // Función para verificar
+ bool isValidDocument(int& number) {
+     while (true) {
+         std::string numberString;
+         std::cout << "Ingrese el número de cedula: " << std::endl;
+         std::cin >> numberString;
+
+         try {
+             number = std::stoi(numberString);
+         }
+         catch (const std::invalid_argument&) {
+             std::cout << "El valor ingresado no es un numero válido. Por favor, intentelo de nuevo." << std::endl;
+             continue;
+         }
+
+         std::string validNumberString = std::to_string(number);
+
+         if (validNumberString.size() >= 7 && validNumberString.size() <= 8) {
+             return true;
+         }
+         else {
+             std::cout << "El numero debe tener entre 7 y 8 digitos. Por favor, intentelo de nuevo." << std::endl;
+             continue;
+         }
+     }
+ }
+
+ // Función para verificar la edad del usuario (10 - 99)
+ bool isAgeValid(int& age) {
+     while (true) {
+     std::string numberString;
+     std::cout << "\nIngrese su edad: " << std::endl;
+     std::cin >> numberString;
+
+     try {
+         age = std::stoi(numberString);
+     }
+     catch (const std::invalid_argument&) {
+         std::cout << "El valor ingresado no es un numero válido. Por favor, intentelo de nuevo." << std::endl;
+         continue;
+     }
+
+     std::string validNumberString = std::to_string(age);
+
+     if (validNumberString.size() == 2) {
+         return true;
+     }
+     else {
+         std::cout << "El número debe tener 2 dígitos. Por favor, inténtelo de nuevo." << std::endl;
+         continue;
+     }
+     }
+ }
+     
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // CONSTANTES A UTILIZAR POR EL SISTEMA
 
 const int MAX_QUARTERS = 12;
@@ -492,40 +620,192 @@ const int creditsWidth = 10;
 // el ancho de campo
 
 // VARIABLES DADAS POR EL USUARIO
+
+// VARIABLES RELACIONADAS CON EL TRIMESTRE
 int userQuarter;
-bool showCareerPathCredits;
+
+
+
+// VARIABLES RELACIONADAS CON LA CARRERA
 int userCareer;
 int mainMenuUserChoice;
 int maxCareersLimit;
+int mentionNumber;
+Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
+.quarter[userQuarter - 1];
+
+
+
+// VARIABLES RELACIONADAS CON LOS CREDITOS
+bool showCareerPathCredits;
+
+// VARIABLES RELACIONADAS CON EL REGISTRO PRINCIPAL
+
+int userCedula;
+std::string userName;
+std::string userLastName;
+int userAge;
 
 int main()
 {
 
-    // Se imprimen las opciones a mostrar para la carrera del usuario
+    // Pidiendo el nombre y el apellido del usuario 
+    userName = insertValidNameOrLastName("", "\nIngrese su nombre (solo carácteres alfabeticos): ",
+        "\nLo siento, su nombre solo debe contener letras. ¿Desea intentar de nuevo? (s/n): ",
+        "\nSu nombre se ha registrado exitosamente dentro del sistema!");
+
+    userLastName = insertValidNameOrLastName("", "\nAhora, ingrese su apellido (solo carácteres alfabeticos): ",
+        "\nLo siento su apellido solo debe contener letras. ¿Desea intentar de nuevo? (s/n): ",
+        "\nSu apellido se ha registrado exitosamente dentro del sistema!");
+    // Se verifica que la cédula sea válida
+    isValidDocument(userCedula);
+
+
+    // Se verifica que el rango de edad esté entre 12 y 99
+    isAgeValid(userAge);
+    
+
+
+    // Mostrar los datos resultantes del usuario
+    
+    std::cout << "Su nombre completo es: " << userName << " " << userLastName << std::endl;
+    std::cout << "Su cedula de identidad es: " << userCedula << std::endl;
+    std::cout << "Su edad es: " << userAge << std::endl;
+
 
     // Menú para el sistema
-    //std::cout << "Bienvenido! Que desea hacer?" << std::endl;
-    //std::cout << "Presione '1' y 'enter' para entrar al sistema de gestión de tareas por trimestre" << std::endl;
-    //std::cout << "Presione '2' y 'enter' para ver los pensum disponibles" << std::endl;
-    //std::cout << "Presione '3' y 'enter' para ver las preguntas frecuentes (FAQ)" << std::endl;
-    //std::cout << "Presione '4' y 'enter' para utilizar un pomodoro" << std::endl;
-    //std::cout << "Estresado por los estudios?, puedes jugar a adivinar un número contra el sistema presionando '5' y 'enter'" << std::endl;
-    //std::cin >> mainMenuUserChoice;
+    std::cout << "Bienvenido! Que desea hacer?" << std::endl;
+    std::cout << "Presione '1' y 'enter' para entrar al sistema de gestion de tareas de la universidad" << std::endl;
+    std::cout << "Presione '2' y 'enter' para ver las preguntas frecuentes (FAQ)" << std::endl;
+    std::cout << "Presione '3' y 'enter' para utilizar un pomodoro" << std::endl;
+    std::cout << "Estresado por los estudios?, puedes jugar a adivinar un número contra el sistema presionando '4' y 'enter'" << std::endl;
+    std::cin >> mainMenuUserChoice;
 
-    //switch(mainMenuUserChoice){
-        //case 5:
-            //GuessNumberGame game;
-            //game.playGame();
-    //}
+    switch (mainMenuUserChoice) {
+
+    // Si el usuario presiona 1
+    case 1: 
+
+        getCareerCreditsAndTrimester(MAX_QUARTERS,
+            userCareer, careerOptions, userQuarter);
+
+        if (!userQuarter) exit(0);
+
+        if (isValidCareer(userCareer)) {
+            showCareerPathCredits = getShowCurrentCredits();
+
+            std::cout << "trimestre: " << userQuarter << std::endl;
+
+            std::cout << "carrera: " << userCareer << std::endl;
+
+            std::cout << "opcion de ver créditos: " << showCareerPathCredits;
+        }
+
+        else {
+            std::cout << "La carrera ingresada no es válida. Por favor, ingrese una carrera válida.";
+        }
+
+        // Se muestra la tabla de la carrera dependiendo del parámetro de showCareerPathCredits
+        showCurrentCareerTable(userCareer, subjectsWidth, creditsWidth,
+            subjectsAndOptionsPerCareer, userQuarter, showCareerPathCredits);
+
+        //Se muestra la tabla de materias trimestre actual
+        showCurrentQuarterSubjects(studentSelectedQuarter, subjectsWidth, creditsWidth,
+            showCareerPathCredits);
+
+        //Se ejecuta la función para añadir tareas
+        addTasks(studentSelectedQuarter);
+
+        // Parámetro de decisión en la opción de añadir
+        //int a = 0;
+
+       //std::cout << "Usuario, que desea hacer?" << std::endl;
+       //std::cout << "presione 1 para crear un pdf con las tareas añadidas" << std::endl;
+       //std::cout << "presione 2 para ver las tareas añadidas" << std::endl;
+       //std::cout << "presione 3 para ver las tareas añadidas y generar un pdf" << std::endl;
+       //std::cin >> a;
+
+       //switch (a)
+       //{
+       //case 1:
+           //generatePDF(studentSelectedQuarter);
+           //std::cout << "PDF generado exitosamente!";
+           //break;
+
+       //case 2:
+           //showTasks(studentSelectedQuarter);
+           //int exitValue;
+           //std::cin >> exitValue;
+           //break;
+
+       //case 3:
+           //showTasks(studentSelectedQuarter);
+           //generatePDF(studentSelectedQuarter);
+
+       //default:
+           //break;
+       //}
+
+
+
+        break;
+    
+
+         //case 4:
+             //GuessNumberGame game;
+             //game.playGame();
+             //break;
+}
+    return 0;
+    }
+
+
+#undef max
+
+
+
+    
+
+
+    // Se crea la estructura para el trimestre de acuerdo a los datos dados 
+    // en getCareerCreditsAndTrimester
+
+    // Crear objeto Trimestre para las tareas
+
+
+    
+ 
+
+
+        //std::cout << "A continuacion, se muestra la respectiva tabla de las materias del trimestre que cursa actualmente" << std::endl;
+
+
+
+
+
+
+
+        // Menú despúes de realizar la selección de tareas
+       
+
+
+
+
+
+
+
+   
+
+    
 
     // Se le pediría al usuario que ingrese su carrera y trimestre
-    getCareerCreditsAndTrimester(MAX_QUARTERS,
-        userCareer, careerOptions, userQuarter);
+    //getCareerCreditsAndTrimester(MAX_QUARTERS,
+        //userCareer, careerOptions, userQuarter);
 
-    if (!userQuarter) exit(0);
+    //if (!userQuarter) exit(0);
 
-    if (isValidCareer(userCareer)) {
-        showCareerPathCredits = getShowCurrentCredits();
+    //if (isValidCareer(userCareer)) {
+        //showCareerPathCredits = getShowCurrentCredits();
 
         //std::cout << "trimestre: " << userQuarter << std::endl;
 
@@ -544,50 +824,48 @@ int main()
     // en getCareerCreditsAndTrimester
 
     // Crear objeto Trimestre para las tareas
-        Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
-            .quarter[userQuarter - 1];
+        //Quarter studentSelectedQuarter = subjectsAndOptionsPerCareer[userCareer - 1]
+            //.quarter[userQuarter - 1];
 
 
-        std::cout << "A continuacion, se muestra la respectiva tabla de las materias del trimestre que cursa actualmente" << std::endl;
+        //std::cout << "A continuacion, se muestra la respectiva tabla de las materias del trimestre que cursa actualmente" << std::endl;
 
         //Se muestra la tabla de materias trimestre actual
-        showCurrentQuarterSubjects(studentSelectedQuarter, subjectsWidth, creditsWidth,
-            showCareerPathCredits);
+        //showCurrentQuarterSubjects(studentSelectedQuarter, subjectsWidth, creditsWidth,
+            //showCareerPathCredits);
 
         // Se ejecuta la función para añadir tareas
-        addTasks(studentSelectedQuarter);
+        //addTasks(studentSelectedQuarter);
 
-        int a;
+        //int a;
 
 
 
         // Menú despúes de realizar la selección de tareas
-        std::cout << "Usuario, que desea hacer?" << std::endl;
-        std::cout << "presione 1 para crear un pdf con las tareas añadidas" << std::endl;
-        std::cout << "presione 2 para ver las tareas añadidas" << std::endl;
-        std::cin >> a;
+        //std::cout << "Usuario, que desea hacer?" << std::endl;
+        //std::cout << "presione 1 para crear un pdf con las tareas añadidas" << std::endl;
+        //std::cout << "presione 2 para ver las tareas añadidas" << std::endl;
+        //std::cin >> a;
 
-        switch (a)
-        {
-        case 1:
-            generatePDF(studentSelectedQuarter);
-            std::cout << "PDF generado exitosamente!";
-            break;
+        //switch (a)
+        //{
+        //case 1:
+            //generatePDF(studentSelectedQuarter);
+            //std::cout << "PDF generado exitosamente!";
+            //break;
 
-        case 2:
-            showTasks(studentSelectedQuarter);
-            int exitValue;
-
-
-            std::cin >> exitValue;
-
-        default:
-            break;
-        }
+        //case 2:
+            //showTasks(studentSelectedQuarter);
+            //int exitValue;
 
 
-        return 0;
-    }
-}
+            //std::cin >> exitValue;
+
+        //default:
+            //break;
+        //}
+
+
+
 
 
