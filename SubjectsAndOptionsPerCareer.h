@@ -11,7 +11,7 @@ Career subjectsAndOptionsPerCareer[3] = {
   {"Geometria Analitica", 3, 0},
   {"Educacion fisica", 2, 0},
   {"Etica y Cultura Universitaria", 2, 0},
-  {"Identidad y Expresion Cultura", 2, 0},
+  {"Identidad y Expresion Cultural", 2, 0},
 	  },
   2, 6 ,{
   {"Matematica 2", 3, 0},
