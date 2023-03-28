@@ -42,7 +42,7 @@ BT
 50 750 Td
 (Lista de tareas) Tj
 0 -20 Td
-(Tareas para Matematica 1) Tj
+(Tareas para Innovacion y Pensamiento Creativo) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -56,7 +56,7 @@ BT
 0 -20 Td
 (----------------------------------------) Tj
 0 -20 Td
-(Tareas para Logica Matematica) Tj
+(Tareas para Psicologia del Adulto) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -70,7 +70,7 @@ BT
 0 -20 Td
 (----------------------------------------) Tj
 0 -20 Td
-(Tareas para Geometria Analitica) Tj
+(Tareas para Practica de Psicologia del Adulto) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -84,7 +84,7 @@ BT
 0 -20 Td
 (----------------------------------------) Tj
 0 -20 Td
-(Tareas para Educacion fisica) Tj
+(Tareas para Neuropsicologia Clinica) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -98,7 +98,7 @@ BT
 0 -20 Td
 (----------------------------------------) Tj
 0 -20 Td
-(Tareas para Etica y Cultura Universitaria) Tj
+(Tareas para Tendencias Digitales en Psicologia Clinica) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -117,7 +117,7 @@ ET
 endstream
 endobj
 6 0 obj
-1319
+1378
 endobj
 7 0 obj
 <<
@@ -149,7 +149,7 @@ stream
 /F1 12 Tf
 BT
 50 750 Td
-(Tareas para Identidad y Expresion Cultural) Tj
+(Tareas para Teoria de los Tratamientos I) Tj
 0 -20 Td
 (Tarea \0431) Tj
 0 -20 Td
@@ -168,7 +168,7 @@ ET
 endstream
 endobj
 10 0 obj
-290
+288
 endobj
 xref
 0 11
@@ -178,11 +178,11 @@ xref
 0000000129 00000 n
 0000000190 00000 n
 0000000376 00000 n
-0000001749 00000 n
-0000001769 00000 n
-0000001867 00000 n
-0000002053 00000 n
-0000002398 00000 n
+0000001808 00000 n
+0000001828 00000 n
+0000001926 00000 n
+0000002112 00000 n
+0000002455 00000 n
 trailer
 <<
 /Root 1 0 R
@@ -190,5 +190,5 @@ trailer
 /Size 11
 >>
 startxref
-2418
+2475
 %%EOF

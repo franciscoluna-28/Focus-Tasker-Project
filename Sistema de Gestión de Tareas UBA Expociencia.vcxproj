@@ -145,6 +145,8 @@
     <ClInclude Include="GetCurrentDate.h" />
     <ClInclude Include="GuessNumberGame.h" />
     <ClInclude Include="ChangeConsoleTextFunctions.h" />
+    <ClInclude Include="Pomodoro.h" />
+    <ClInclude Include="Mention.h" />
     <ClInclude Include="SubjectsAndOptionsPerCareer.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="Subject.h" />
