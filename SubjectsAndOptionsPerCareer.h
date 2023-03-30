@@ -239,6 +239,8 @@ Career subjectsAndOptionsPerCareer[3] = {
 
   }
   }, {
+
+// 0: Mencion General, 1: Mencion Telecomunicaciones , 2: Mencion Metrologia , 3: Mencion Biomedica
 "Ingenieria Electrica", 
 	  {1, 6, {
 {"Matematica 1", 3, 0},

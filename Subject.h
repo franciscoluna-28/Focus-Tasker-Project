@@ -8,6 +8,7 @@ struct Subject {
 	std::string name;
 	int credits;
 	int mentionNumber;
+	bool wantsToSkip = false;
 	Task tasks[4];
 	int numTasks;
 };
