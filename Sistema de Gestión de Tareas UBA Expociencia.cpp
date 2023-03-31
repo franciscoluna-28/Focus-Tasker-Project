@@ -111,8 +111,8 @@ std::string getCurrentDate() {
     dateStream << tm_now.tm_mday << "/" <<
         tm_now.tm_mon + 1 << "/" <<
 
-    // Se añade el año al flujo de salida de cadena (en formato de dos dígitos)
-    tm_now.tm_year + 1900 - 2000;
+        // Se añade el año al flujo de salida de cadena (en formato de dos dígitos)
+        tm_now.tm_year + 1900 - 2000;
 
     // Devuelve la fecha como una cadena de caracteres (string)
     return dateStream.str();
@@ -177,20 +177,20 @@ int getCareerSelection(std::vector<std::string> possibleCareerOptions) {
     std::cin >> seleccion;
 
     // Verifica que la última entrada del usuario sea un número 
-    if (std::cin.fail()) { 
+    if (std::cin.fail()) {
 
         // Si el último valor ingresado no es un número válido
         showRedConsoleMessage();
         std::cout << "\nEntrada Invalida. Por favor, intente de nuevo." << std::endl;
 
         // Borrar el estado de error de std::cin
-        std::cin.clear(); 
+        std::cin.clear();
 
         // Ignorar cualquier entrada adicional hasta una nueva línea
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         // Llamada recursiva para obtener una selección válida
-        return getCareerSelection(possibleCareerOptions); 
+        return getCareerSelection(possibleCareerOptions);
     }
     else if (seleccion >= 1 && seleccion <= possibleCareerOptions.size()) {
 
@@ -198,14 +198,14 @@ int getCareerSelection(std::vector<std::string> possibleCareerOptions) {
         return seleccion;
     }
 
-     // De lo contrario, se le pide al usuario que ingrese un valor válido nuevamente
+    // De lo contrario, se le pide al usuario que ingrese un valor válido nuevamente
     else {
         showRedConsoleMessage();
         std::cout << "\nNumero Invalido. Por favor, intente de nuevo." << std::endl;
 
         // Llamada recursiva para obtener una selección válida
         showDefaultColorConsoleMessage();
-        return getCareerSelection(possibleCareerOptions); 
+        return getCareerSelection(possibleCareerOptions);
 
         // Una llamada recursiva es una técnica de programación en la que
         // Una función se llama a si misma hasta que el usuario
@@ -224,7 +224,7 @@ void showCareerOptions(const std::vector<std::string>& possibleCareerOptions) {
     for (int i = 0; i < possibleCareerOptions.size(); i++) {
         std::cout << "Escriba '" << i + 1 << "' para elegir " << possibleCareerOptions[i] << std::endl;
     }
-  
+
 }
 
 // Obtener la selección del usuario y llamar sub - funciones
@@ -364,47 +364,47 @@ void printTotalCreditsRow(int subjectNameWidth, int creditNumberWidth, int total
 // Usa los argumentos del número de la carrara, el largo del nombre de la materia
 // el largo de los créditos, la carrera seleccionada, el trimestre seleccionado, 
 // El boolean para mostrar los créditos y el número de la mención
- void showCurrentCareerTable(int careerNumber, int subjectNameWidth, int creditNumberWidth,
-     const Career* careers, int selectedUserQuarter, bool showCredits, int mentionNumber) {
+void showCurrentCareerTable(int careerNumber, int subjectNameWidth, int creditNumberWidth,
+    const Career* careers, int selectedUserQuarter, bool showCredits, int mentionNumber) {
 
-     showDefaultColorConsoleMessage();
+    showDefaultColorConsoleMessage();
 
-     // Se obtiene el indice correspondiente de la carrera
-     // Puesto que los arrays empiezan en 0 y nuestra selección va de 1 a 3
-     const Career& career = careers[careerNumber - 1];
-     std::cout << "Carrera: " << career.name << "\n\n";
+    // Se obtiene el indice correspondiente de la carrera
+    // Puesto que los arrays empiezan en 0 y nuestra selección va de 1 a 3
+    const Career& career = careers[careerNumber - 1];
+    std::cout << "Carrera: " << career.name << "\n\n";
 
-     // Mostrar menú de selección
-     std::string selection = "";
-     bool showAllQuarters = false;
+    // Mostrar menú de selección
+    std::string selection = "";
+    bool showAllQuarters = false;
 
-     // Estructura repetitiva para obligar al usuario a colocar
-     // Un valor válido
-     while (selection != "s" && selection != "n") {
-         std::cout << "Desea ver todos los trimestres? (s/n): ";
-         std::cin >> selection;
-         if (selection == "s") {
-             showAllQuarters = true;
-         }
-         else if (selection == "n") {
-             showAllQuarters = false;
-         }
-         else {
-             showRedConsoleMessage();
-             std::cout << "Por favor, ingrese una opcion valida.\n";
-         }
-     }
+    // Estructura repetitiva para obligar al usuario a colocar
+    // Un valor válido
+    while (selection != "s" && selection != "n") {
+        std::cout << "Desea ver todos los trimestres? (s/n): ";
+        std::cin >> selection;
+        if (selection == "s") {
+            showAllQuarters = true;
+        }
+        else if (selection == "n") {
+            showAllQuarters = false;
+        }
+        else {
+            showRedConsoleMessage();
+            std::cout << "Por favor, ingrese una opcion valida.\n";
+        }
+    }
 
-     // Recorriendo el trimestre correspondiente mediante un
-     // Bucle for each ':'el cúal se utiliza para recorrer cada
-     // Arreglo dentro del contenedor
+    // Recorriendo el trimestre correspondiente mediante un
+    // Bucle for each ':'el cúal se utiliza para recorrer cada
+    // Arreglo dentro del contenedor
 
 
-     // PARA LA EXPOCIENCIA
-     // Ejemplo sencillo (própositos de enseñanza
-     // Durante la expociencia
-     //std::vector<int> nums = {1, 2, 3, 4, 5};
-     // 
+    // PARA LA EXPOCIENCIA
+    // Ejemplo sencillo (própositos de enseñanza
+    // Durante la expociencia
+    //std::vector<int> nums = {1, 2, 3, 4, 5};
+    // 
 // Itera sobre cada elemento en el vector y lo imprime
      //for (const int& num : nums) {
          //std::cout << num << std::endl;
@@ -414,525 +414,526 @@ void printTotalCreditsRow(int subjectNameWidth, int creditNumberWidth, int total
      // Verificando la opción escogida mediante un if (ver todos los trimestre
      // O verificar que el número del trimestre sea igual al que asignó el usuario
      // Esto para recorrer los trimestres
-     for (const Quarter& quarter : career.quarter) {
-         if (showAllQuarters || quarter.quarterNumber == selectedUserQuarter) {
+    for (const Quarter& quarter : career.quarter) {
+        if (showAllQuarters || quarter.quarterNumber == selectedUserQuarter) {
 
-             // Variable para guardar las materias con contenido
-             int nonEmptySubjects = 0;
+            // Variable para guardar las materias con contenido
+            int nonEmptySubjects = 0;
 
-             // Recorremos ahora las materias mediante otro bucle for each
-             for (const Subject& subject : quarter.subjects) {
+            // Recorremos ahora las materias mediante otro bucle for each
+            for (const Subject& subject : quarter.subjects) {
 
-                 // Verificamos que el nombre de cada materia no esté vacio y que tengamos o el indice por defecto (0)
-                 // Disponible en todas las menciones y las materias correspondientes a la mención seleccionada
-                 // Por el usuario, posteriomente, se incrementa el contador de 'nonEmptySubjects'
-                 if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
-                     nonEmptySubjects++;
-                 }
-             }
+                // Verificamos que el nombre de cada materia no esté vacio y que tengamos o el indice por defecto (0)
+                // Disponible en todas las menciones y las materias correspondientes a la mención seleccionada
+                // Por el usuario, posteriomente, se incrementa el contador de 'nonEmptySubjects'
+                if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
+                    nonEmptySubjects++;
+                }
+            }
 
-             showDefaultColorConsoleMessage();
-             // Solo mostrar los trimestres que tengan materias
-             if (nonEmptySubjects > 0) {
-                 std::cout << "Trimestre " << quarter.quarterNumber << ":\n";
+            showDefaultColorConsoleMessage();
+            // Solo mostrar los trimestres que tengan materias
+            if (nonEmptySubjects > 0) {
+                std::cout << "Trimestre " << quarter.quarterNumber << ":\n";
 
-                 printTableHeader(subjectNameWidth, creditNumberWidth);
+                printTableHeader(subjectNameWidth, creditNumberWidth);
 
-                 int totalCredits = 0;
+                int totalCredits = 0;
 
-                 // Nuevamente, verificamos condiciones pero con las materias 
-                 // De cada trimestre (quarter)
-                 for (const Subject& subject : quarter.subjects) {
-                     if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
-                         printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
-                     }
-                 }
+                // Nuevamente, verificamos condiciones pero con las materias 
+                // De cada trimestre (quarter)
+                for (const Subject& subject : quarter.subjects) {
+                    if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
+                        printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
+                    }
+                }
 
-                 printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits, showCredits);
+                printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits, showCredits);
 
-                 std::cout << "\n";
-             }
-         }
-     }
- }
- // Esta función incluye selección de (s/n)
-
-
- // Función para unicamente mostrar la tabla del trimestre actual
- // para las tareas
- void showCurrentQuarterSubjects(const Quarter& quarter, int subjectNameWidth,
-     int creditNumberWidth, bool showCredits, int mentionNumber) {
-
-     // Se sigue la misma lógica que en la función de 
-     // ShowCurrentCareerTable, con la diferencia de que esta
-     // Función unicamente muestra la tabla del trimestre seleccionado
-     // Para tenerlo como referencia a la hora de añadir las tareas
-     int nonEmptySubjects = 0;
-     for (const Subject& subject : quarter.subjects) {
-         if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
-             nonEmptySubjects++;
-         }
-     }
-
-     // Solo mostrar el trimestre actual si tiene materias
-     if (nonEmptySubjects > 0) {
-         std::cout << "\nTrimestre " << quarter.quarterNumber << ":\n";
-
-         printTableHeader(subjectNameWidth, creditNumberWidth);
-
-         int totalCredits = 0;
-         for (const Subject& subject : quarter.subjects) {
-             if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
-                 printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
-             }
-         }
-
-         printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits, showCredits);
-
-         std::cout << "\n";
-     }
- }
+                std::cout << "\n";
+            }
+        }
+    }
+}
+// Esta función incluye selección de (s/n)
 
 
- // AÑADIR TAREAS Y CONVERTIR A PDF
+// Función para unicamente mostrar la tabla del trimestre actual
+// para las tareas
+void showCurrentQuarterSubjects(const Quarter& quarter, int subjectNameWidth,
+    int creditNumberWidth, bool showCredits, int mentionNumber) {
 
- // Función para guardar el archivo del PDF
- // En un directorio personalizado
- void savePDF(HPDF_Doc pdf) {
+    // Se sigue la misma lógica que en la función de 
+    // ShowCurrentCareerTable, con la diferencia de que esta
+    // Función unicamente muestra la tabla del trimestre seleccionado
+    // Para tenerlo como referencia a la hora de añadir las tareas
+    int nonEmptySubjects = 0;
+    for (const Subject& subject : quarter.subjects) {
+        if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
+            nonEmptySubjects++;
+        }
+    }
 
-     // Obtener la ubicación para guardar el pdf
-     OPENFILENAMEA ofn;
-     char szFileName[MAX_PATH] = "";
-     ZeroMemory(&ofn, sizeof(ofn));
-     ofn.lStructSize = sizeof(ofn);
-     ofn.hwndOwner = NULL;
-     ofn.lpstrFilter = "PDF Files (*.pdf)\0*.pdf\0All Files (*.*)\0*.*\0";
-     ofn.lpstrFile = szFileName;
-     ofn.nMaxFile = MAX_PATH;
-     ofn.Flags = OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+    // Solo mostrar el trimestre actual si tiene materias
+    if (nonEmptySubjects > 0) {
+        std::cout << "\nTrimestre " << quarter.quarterNumber << ":\n";
 
-     if (GetSaveFileNameA(&ofn)) {
-         std::string filename = szFileName;
+        printTableHeader(subjectNameWidth, creditNumberWidth);
 
-         // Craemos un nuevo archivo basado en el nombre del pdf
-         std::string newFilenameStr = filename;
-         if (newFilenameStr.substr(newFilenameStr.size() - 4) != ".pdf") {
-             newFilenameStr += ".pdf";
-         }
+        int totalCredits = 0;
+        for (const Subject& subject : quarter.subjects) {
+            if (!subject.name.empty() && (subject.mentionNumber == 0 || subject.mentionNumber == mentionNumber)) {
+                printTableRow(subject, subjectNameWidth, creditNumberWidth, showCredits, totalCredits);
+            }
+        }
 
-         // Guardamos el PDF
-         HPDF_SaveToFile(pdf, newFilenameStr.c_str());
+        printTotalCreditsRow(subjectNameWidth, creditNumberWidth, totalCredits, showCredits);
 
-         // Notificaciones de sucess
-         MessageBoxA(NULL, "El archivo PDF ha sido guardado con exito.", "Exito", MB_OK | MB_ICONINFORMATION);
-     }
-     else {
-         // Notificaciones de error
-         MessageBoxA(NULL, "No se ha seleccionado ninguna ubicacion para guardar el archivo PDF.", "Error", MB_OK | MB_ICONERROR);
-         HPDF_Free(pdf);
-         return;
-     }
- }
+        std::cout << "\n";
+    }
+}
+
+
+// AÑADIR TAREAS Y CONVERTIR A PDF
+
+// Función para guardar el archivo del PDF
+// En un directorio personalizado
+void savePDF(HPDF_Doc pdf) {
+
+    // Obtener la ubicación para guardar el pdf
+    OPENFILENAMEA ofn;
+    char szFileName[MAX_PATH] = "";
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = NULL;
+    ofn.lpstrFilter = "PDF Files (*.pdf)\0*.pdf\0All Files (*.*)\0*.*\0";
+    ofn.lpstrFile = szFileName;
+    ofn.nMaxFile = MAX_PATH;
+    ofn.Flags = OFN_EXPLORER | OFN_OVERWRITEPROMPT;
+
+    if (GetSaveFileNameA(&ofn)) {
+        std::string filename = szFileName;
+
+        // Craemos un nuevo archivo basado en el nombre del pdf
+        std::string newFilenameStr = filename;
+        if (newFilenameStr.substr(newFilenameStr.size() - 4) != ".pdf") {
+            newFilenameStr += ".pdf";
+        }
+
+        // Guardamos el PDF
+        HPDF_SaveToFile(pdf, newFilenameStr.c_str());
+
+        // Notificaciones de sucess
+        MessageBoxA(NULL, "El archivo PDF ha sido guardado con exito.", "Exito", MB_OK | MB_ICONINFORMATION);
+    }
+    else {
+        // Notificaciones de error
+        MessageBoxA(NULL, "No se ha seleccionado ninguna ubicacion para guardar el archivo PDF.", "Error", MB_OK | MB_ICONERROR);
+        HPDF_Free(pdf);
+        return;
+    }
+}
 
 // Función para convertir a PDF
  // Toma como argumentos el trimestre actual y el número de la mención del usuario
- void generatePDF(Quarter quarter, int userMentionNumber) {
+void generatePDF(Quarter quarter, int userMentionNumber) {
 
-     // Setup inicial de la libreria de HPDF
+    // Setup inicial de la libreria de HPDF
 
-     // Configuración del PDF Inicial
-     HPDF_Doc pdf = HPDF_New(NULL, NULL);
+    // Configuración del PDF Inicial
+    HPDF_Doc pdf = HPDF_New(NULL, NULL);
 
-     // Estado del PDF
-     HPDF_STATUS status;
+    // Estado del PDF
+    HPDF_STATUS status;
 
-     // Se añade una página nueva
-     HPDF_Page page = HPDF_AddPage(pdf);
+    // Se añade una página nueva
+    HPDF_Page page = HPDF_AddPage(pdf);
 
-     // Y configuramos el estado de nuestra plantilla
-     status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+    // Y configuramos el estado de nuestra plantilla
+    status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
 
-     // Si el estado del PDF, por algún motivo en específico, no es correcto
-     // Se imprime un mensaje de error
-     if (status != HPDF_OK) {
-         std::cerr << "Error al establecer el tamaño de la página" << std::endl;
-         HPDF_Free(pdf);
-         return;
-     }
+    // Si el estado del PDF, por algún motivo en específico, no es correcto
+    // Se imprime un mensaje de error
+    if (status != HPDF_OK) {
+        std::cerr << "Error al establecer el tamaño de la página" << std::endl;
+        HPDF_Free(pdf);
+        return;
+    }
 
-     // Estableciendo las propiedades de fuente y de tamaño
-     // De nuestro PDF
-     HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
-     HPDF_Page_SetFontAndSize(page, font, 12);
-     HPDF_Page_BeginText(page);
-     HPDF_Page_MoveTextPos(page, 50, 750);
-     HPDF_Page_ShowText(page, "Lista de tareas");
-     HPDF_Page_MoveTextPos(page, 0, -20);
+    // Estableciendo las propiedades de fuente y de tamaño
+    // De nuestro PDF
+    HPDF_Font font = HPDF_GetFont(pdf, "Helvetica", NULL);
+    HPDF_Page_SetFontAndSize(page, font, 12);
+    HPDF_Page_BeginText(page);
+    HPDF_Page_MoveTextPos(page, 50, 750);
+    HPDF_Page_ShowText(page, "Lista de tareas");
+    HPDF_Page_MoveTextPos(page, 0, -20);
 
-     // Creamos una variable para ir tomando en cuenta el número de
-     // Lineas. Esto, para ir creando páginas adicionales a medida
-     // Que la lista de las tareas se vaya volviendo más extensa
-     int numLines = 0;
+    // Creamos una variable para ir tomando en cuenta el número de
+    // Lineas. Esto, para ir creando páginas adicionales a medida
+    // Que la lista de las tareas se vaya volviendo más extensa
+    int numLines = 0;
 
-     // Recorriendo las carreras del trimestre
-     for (int i = 0; i < quarter.maxSubjects; i++) {
+    // Recorriendo las carreras del trimestre
+    for (int i = 0; i < quarter.maxSubjects; i++) {
 
-         // Condiciones para evitar nombres vacíos, materias innecesarias y que solamente
-         // Se muestre la información que solicite el usuario
-         if (quarter.subjects[i].name != "" && quarter.subjects[i].mentionNumber == 0 ||
-             quarter.subjects[i].mentionNumber == userMentionNumber && quarter.subjects[i].wantsToSkip == false) {
+        // Condiciones para evitar nombres vacíos, materias innecesarias y que solamente
+        // Se muestre la información que solicite el usuario
+        if (quarter.subjects[i].name != "" && quarter.subjects[i].mentionNumber == 0 ||
+            quarter.subjects[i].mentionNumber == userMentionNumber && quarter.subjects[i].wantsToSkip == false) {
 
-              // Nuevamente, filtrado mcontenido mediante otro 'if' para 
-              // evitar imprimir "tareas para" en materias que no
-             // Tengan tareas en 'Tareas para'
-             if (quarter.subjects[i].wantsToSkip != true && quarter.subjects[i].tasks[i].taskName != "") {
-                 HPDF_Page_ShowText(page, (std::string("Tareas para ") + quarter.subjects[i].name).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-             }
+            // Nuevamente, filtrado mcontenido mediante otro 'if' para 
+            // evitar imprimir "tareas para" en materias que no
+           // Tengan tareas en 'Tareas para'
+            if (quarter.subjects[i].wantsToSkip != true || quarter.subjects[i].tasks[i].taskName != "") {
+                HPDF_Page_ShowText(page, (std::string("Tareas para ") + quarter.subjects[i].name).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+            }
 
-             // Ahora si, tras hacer el filtrado necesario podemos empezar a mostrar
-             // Cada una de las tareas creadas por el usuario, mediante una estructura
-             // Repetitiva for
-             for (int j = 0; j < quarter.subjects[i].numTasks; j++) {
-                 Task task = quarter.subjects[i].tasks[j];
-                 HPDF_Page_ShowText(page, (std::string("Tarea #") + std::to_string(j + 1)).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-                 HPDF_Page_ShowText(page, (std::string("Nombre de la tarea: ") + task.taskName).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-                 HPDF_Page_ShowText(page, (std::string("Fecha de entrega: ") + task.deliveryDate).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-                 HPDF_Page_ShowText(page, (std::string("Descripcion: ") + task.description).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-                 HPDF_Page_ShowText(page, (std::string("Prioridad: ") + std::to_string(task.priority)).c_str());
-                 HPDF_Page_MoveTextPos(page, 0, -20);
-                 HPDF_Page_ShowText(page, "----------------------------------------");
-                 HPDF_Page_MoveTextPos(page, 0, -20);
+            // Ahora si, tras hacer el filtrado necesario podemos empezar a mostrar
+            // Cada una de las tareas creadas por el usuario, mediante una estructura
+            // Repetitiva for
+            for (int j = 0; j < quarter.subjects[i].numTasks; j++) {
+                Task task = quarter.subjects[i].tasks[j];
+                HPDF_Page_ShowText(page, (std::string("Tarea #") + std::to_string(j + 1)).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+                HPDF_Page_ShowText(page, (std::string("Nombre de la tarea: ") + task.taskName).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+                HPDF_Page_ShowText(page, (std::string("Fecha de entrega: ") + task.deliveryDate).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+                HPDF_Page_ShowText(page, (std::string("Descripcion: ") + task.description).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+                HPDF_Page_ShowText(page, (std::string("Prioridad: ") + std::to_string(task.priority)).c_str());
+                HPDF_Page_MoveTextPos(page, 0, -20);
+                HPDF_Page_ShowText(page, "----------------------------------------");
+                HPDF_Page_MoveTextPos(page, 0, -20);
 
-                 //Se aumenta el número de lineas en cada materia 
-                 numLines += 7;
+                //Se aumenta el número de lineas en cada materia 
+                numLines += 7;
 
-                 // Ahora, si el número de lineas es igual
-                 // O mayor a 35, creamos otra página
-                 if (numLines >= 35
-                     ) {
-                     HPDF_Page_EndText(page);
-                     page = HPDF_AddPage(pdf);
-                     status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
-                     if (status != HPDF_OK) {
-                         std::cerr << "Error al establecer el tamaño de la pagina" << std::endl;
-                         HPDF_Free(pdf);
-                         return;
-                     }
+                // Ahora, si el número de lineas es igual
+                // O mayor a 35, creamos otra página
+                if (numLines >= 35
+                    ) {
+                    HPDF_Page_EndText(page);
+                    page = HPDF_AddPage(pdf);
+                    status = HPDF_Page_SetSize(page, HPDF_PAGE_SIZE_A4, HPDF_PAGE_PORTRAIT);
+                    if (status != HPDF_OK) {
+                        std::cerr << "Error al establecer el tamaño de la pagina" << std::endl;
+                        HPDF_Free(pdf);
+                        return;
+                    }
 
-                     // Terminamos de establecer nuestras condiciones
-                     // Para crear el PDF en la página/s siguiente/s
-                     HPDF_Page_SetFontAndSize(page, font, 12);
-                     HPDF_Page_BeginText(page);
-                     HPDF_Page_MoveTextPos(page, 50, 750);
-                     numLines = 0;
-                 }
-             }
-         }
-     }
- 
-     // Terminando de configurar nuestro
-     // Archivo .PDF
-     HPDF_Page_EndText(page);
-     savePDF(pdf);
-     HPDF_Free(pdf);
- }
+                    // Terminamos de establecer nuestras condiciones
+                    // Para crear el PDF en la página/s siguiente/s
+                    HPDF_Page_SetFontAndSize(page, font, 12);
+                    HPDF_Page_BeginText(page);
+                    HPDF_Page_MoveTextPos(page, 50, 750);
+                    numLines = 0;
+                }
+            }
+        }
+    }
 
- // Función para imprimir las tareas añadidas
- void showTasks(Quarter quarter, int userMentionNumber) {
-     showDefaultColorConsoleMessage();
+    // Terminando de configurar nuestro
+    // Archivo .PDF
+    HPDF_Page_EndText(page);
+    savePDF(pdf);
+    HPDF_Free(pdf);
+}
 
-     // Recorre todas las materias en el trimestre
-     for (int i = 0; i < quarter.maxSubjects; i++) { 
+// Función para imprimir las tareas añadidas
+void showTasks(Quarter quarter, int userMentionNumber) {
+    showDefaultColorConsoleMessage();
 
-         // Nuevamente, obviando materias vacías y que no hayan sido 
-         // Seleccionadas por el usuario
-         if(quarter.subjects[i].name != "" 
-             && quarter.subjects[i].mentionNumber == 0 || 
-             quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].wantsToSkip == true) // Evita que se muestren materias vacias
-             // Y materias que no pertenezcan a la mencion seleccionada
+    // Recorre todas las materias en el trimestre
+    for (int i = 0; i < quarter.maxSubjects; i++) {
 
- 
-        // Y finalmente se imprime cada una de las tareas
-         std::cout << "Tareas para " << quarter.subjects[i].name << ":" << quarter.subjects[i].numTasks << std::endl;
-         for (int j = 0; j < quarter.subjects[i].numTasks; j++) { // Recorre todas las tareas de la materia actual
-             Task task = quarter.subjects[i].tasks[j];
-             std::cout << "Tarea #" << j + 1 << std::endl;
-             std::cout << "Nombre de la tarea: " << task.taskName << std::endl;
-             std::cout << "Fecha de entrega: " << task.deliveryDate << std::endl;
-             std::cout << "Descripcion: " << task.description << std::endl;
-             std::cout << "Prioridad: " << task.priority << std::endl;
-             std::cout << std::endl;
-         }
-     }
- }
-
- // Función para agregar tareas
- void addTasks(Quarter& quarter, int userMentionNumber) {
-
-     showDefaultColorConsoleMessage();
-
-     // Recorriendo las materias de cada trimestre y estableciendo condiciones para
-     // Evitar mostrar datos incorrectos
-     for (int i = 0; i < quarter.maxSubjects; i++) {
-         if (quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].mentionNumber == 0) {
-
-             std::cout << "\nDesea agregar tareas para " << quarter.subjects[i].name << "? (s/n)" << std::endl;
-             char choice;
-             while (!(std::cin >> choice) || (choice != 's' && choice != 'n')) {
-                 showRedConsoleMessage();
-                 std::cout << "\nPor favor, ingrese 's' o 'n'" << std::endl;
-                 std::cin.clear();
-                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-             }
-             std::cin.ignore();
-
-             // Opción para saltarse una materia
-             if (choice == 'n') {
-                 quarter.subjects[i].wantsToSkip = true;
-                 continue; // Saltar a la siguiente materia
-             }
-             else {
-                 quarter.subjects[i].wantsToSkip = false;
-             }
-         }
+        // Nuevamente, obviando materias vacías y que no hayan sido 
+        // Seleccionadas por el usuario
+        if (quarter.subjects[i].name != ""
+            && quarter.subjects[i].mentionNumber == 0 ||
+            quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].wantsToSkip == true) // Evita que se muestren materias vacias
+            // Y materias que no pertenezcan a la mencion seleccionada
 
 
-         // Variable para tener en cuenta el número de 
-         // Tareas a añadir
-         int taskAmount;
+       // Y finalmente se imprime cada una de las tareas
+            std::cout << "Tareas para " << quarter.subjects[i].name << ":" << quarter.subjects[i].numTasks << std::endl;
+        for (int j = 0; j < quarter.subjects[i].numTasks; j++) { // Recorre todas las tareas de la materia actual
+            Task task = quarter.subjects[i].tasks[j];
+            std::cout << "Tarea #" << j + 1 << std::endl;
+            std::cout << "Nombre de la tarea: " << task.taskName << std::endl;
+            std::cout << "Fecha de entrega: " << task.deliveryDate << std::endl;
+            std::cout << "Descripcion: " << task.description << std::endl;
+            std::cout << "Prioridad: " << task.priority << std::endl;
+            std::cout << std::endl;
+        }
+    }
+}
 
-         // Recorremos las materias que el usuario haya señalado que no quiere 
-         // Saltarse, siendo aquí la propiedad de de 'wantsToSkip' falsea y mostrando
-         // Solamente las materias correspondientes al número de la mención
-         if (quarter.subjects[i].wantsToSkip == false && quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].mentionNumber == 0) {
-             std::cout << "\nIngrese la cantidad de tareas (sumativas) para " << quarter.subjects[i].name << ": " << "(Maximo de 4)" << std::endl;
-             std::cout << "Verifique sus datos antes de confirmar" << std::endl;
+// Función para agregar tareas
+void addTasks(Quarter& quarter, int userMentionNumber) {
 
-             // Manejando errores en caso de colocar carácteres
-             while (!(std::cin >> taskAmount)) {
-                 showRedConsoleMessage();
-                 std::cout << "\n Por favor, ingrese un numero valido" << std::endl;
+    showDefaultColorConsoleMessage();
 
-                 std::cin.clear();
-                 while (std::cin.get() != '\n') {}
-             }
-             std::cin.ignore();
+    // Recorriendo las materias de cada trimestre y estableciendo condiciones para
+    // Evitar mostrar datos incorrectos
+    for (int i = 0; i < quarter.maxSubjects; i++) {
+        if (quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].mentionNumber == 0) {
 
+            std::cout << "\nDesea agregar tareas para " << quarter.subjects[i].name << "? (s/n)" << std::endl;
+            char choice;
+            while (!(std::cin >> choice) || (choice != 's' && choice != 'n')) {
+                showRedConsoleMessage();
+                std::cout << "\nPor favor, ingrese 's' o 'n'" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+            std::cin.ignore();
 
-             if (taskAmount > 4) {
-                 std::cout << "\nValor superior al establecido, estableciendo su limite de tareas a 4..." << std::endl;
-                 taskAmount = 4;
-             }
-
-             // Se le piden al usuario los datos necesarios para
-             // Cada una de las tareas dentro de las materias
-             for (int j = 0; j < taskAmount; j++) {
-                 Task task;
-                 task.taskName = "";
-                 task.currentDate = "";
-                 task.deliveryDate = "";
-                 task.description = "";
-                 task.priority = 0;
-                 std::cout << "\nTarea # " << j + 1;
-
-                 // Preguntas al usuario
-
-                 std::cout << "\nIngrese el nombre la de estrategia para la sumativa: ";
-                 std::getline(std::cin, task.taskName);
-
-                 std::cout << "\nFecha de creacion de la tarea " << getCurrentDate() << std::endl;
-
-                 std::cout << "\nIngrese la fecha de entrega de la tarea (formato DD - MM - AAAA) o (DD - MM): ";
-                 std::getline(std::cin, task.deliveryDate);
-
-                 std::cout << "\nIngrese una descripcion para la sumativa: ";
-                 std::getline(std::cin, task.description);
-
-                 // Manejando errores en la prioridad
-                 bool validPriority = false;
-                 while (!validPriority) {
-                     showDefaultColorConsoleMessage();
-                     std::cout << "\nIngrese la prioridad de la actividad sumativa (1 a 5): ";
-                     std::string priorityStr;
-                     std::getline(std::cin, priorityStr);
-
-                     try {
-                         int priority = std::stoi(priorityStr);
-                         if (priority < 1 || priority > 5) {
-                             showRedConsoleMessage();
-                             std::cout << "\nLa prioridad debe ser un numero entre 1 y 5" << std::endl;
-                         }
-                         else {
-                             task.priority = priority;
-                             validPriority = true;
-                         }
-                     }
-                     catch (std::invalid_argument&) {
-                         showRedConsoleMessage();
-                         std::cout << "\nLa prioridad debe ser un numero entre 1 y 5" << std::endl;
-                     }
-                 }
-
-                 // Si la tarea, se añade satisfactoriamente,
-                 // Entonces se añaden al arreglo de tareas
-                 // Y se suma el número de tareas
-                 showDefaultColorConsoleMessage();
-                 quarter.subjects[i].tasks[j] = task;
-                 quarter.subjects[i].numTasks++;
+            // Opción para saltarse una materia
+            if (choice == 'n') {
+                quarter.subjects[i].wantsToSkip = true;
+                continue; // Saltar a la siguiente materia
+            }
+            else {
+                quarter.subjects[i].wantsToSkip = false;
+            }
+        }
 
 
+        // Variable para tener en cuenta el número de 
+        // Tareas a añadir
+        int taskAmount;
 
-             }
-         }
-     }
- }
- 
+        showDefaultColorConsoleMessage();
+        // Recorremos las materias que el usuario haya señalado que no quiere 
+        // Saltarse, siendo aquí la propiedad de de 'wantsToSkip' falsea y mostrando
+        // Solamente las materias correspondientes al número de la mención
+        if (quarter.subjects[i].wantsToSkip == false && quarter.subjects[i].mentionNumber == userMentionNumber || quarter.subjects[i].mentionNumber == 0) {
+            std::cout << "\nIngrese la cantidad de tareas (sumativas) para " << quarter.subjects[i].name << ": " << "(Maximo de 4)" << std::endl;
+            std::cout << "Verifique sus datos antes de confirmar" << std::endl;
 
- // REGISTRAR USUARIO
+            // Manejando errores en caso de colocar carácteres
+            while (!(std::cin >> taskAmount)) {
+                showRedConsoleMessage();
+                std::cout << "\n Por favor, ingrese un numero valido" << std::endl;
 
- // Función para validar strings únicamente con letras
- bool isValidString(const std::string& string)
- {
-     for (char c : string) {
+                std::cin.clear();
+                while (std::cin.get() != '\n') {}
+            }
+            std::cin.ignore();
+
+
+            if (taskAmount > 4) {
+                std::cout << "\nValor superior al establecido, estableciendo su limite de tareas a 4..." << std::endl;
+                taskAmount = 4;
+            }
+
+            // Se le piden al usuario los datos necesarios para
+            // Cada una de las tareas dentro de las materias
+            for (int j = 0; j < taskAmount; j++) {
+                Task task;
+                task.taskName = "";
+                task.currentDate = "";
+                task.deliveryDate = "";
+                task.description = "";
+                task.priority = 0;
+                std::cout << "\nTarea # " << j + 1;
+
+                // Preguntas al usuario
+
+                std::cout << "\nIngrese el nombre la de estrategia para la sumativa: ";
+                std::getline(std::cin, task.taskName);
+
+                std::cout << "\nFecha de creacion de la tarea " << getCurrentDate() << std::endl;
+
+                std::cout << "\nIngrese la fecha de entrega de la tarea (formato DD - MM - AAAA) o (DD - MM): ";
+                std::getline(std::cin, task.deliveryDate);
+
+                std::cout << "\nIngrese una descripcion para la sumativa: ";
+                std::getline(std::cin, task.description);
+
+                // Manejando errores en la prioridad
+                bool validPriority = false;
+                while (!validPriority) {
+                    showDefaultColorConsoleMessage();
+                    std::cout << "\nIngrese la prioridad de la actividad sumativa (1 a 5): ";
+                    std::string priorityStr;
+                    std::getline(std::cin, priorityStr);
+
+                    try {
+                        int priority = std::stoi(priorityStr);
+                        if (priority < 1 || priority > 5) {
+                            showRedConsoleMessage();
+                            std::cout << "\nLa prioridad debe ser un numero entre 1 y 5" << std::endl;
+                        }
+                        else {
+                            task.priority = priority;
+                            validPriority = true;
+                        }
+                    }
+                    catch (std::invalid_argument&) {
+                        showRedConsoleMessage();
+                        std::cout << "\nLa prioridad debe ser un numero entre 1 y 5" << std::endl;
+                    }
+                }
+
+                // Si la tarea, se añade satisfactoriamente,
+                // Entonces se añaden al arreglo de tareas
+                // Y se suma el número de tareas
+                showDefaultColorConsoleMessage();
+                quarter.subjects[i].tasks[j] = task;
+                quarter.subjects[i].numTasks++;
+
+
+
+            }
+        }
+    }
+}
+
+
+// REGISTRAR USUARIO
+
+// Función para validar strings únicamente con letras
+bool isValidString(const std::string& string)
+{
+    for (char c : string) {
 
         // Se verifica si cada uno de los carácteres
          // Del string dado son alfabéticos con 'std::isalpha'
-         if (!std::isalpha(c)) {
-             return false;
-         }
-     }
-     return true;
- }
+        if (!std::isalpha(c)) {
+            return false;
+        }
+    }
+    return true;
+}
 
- // Función para obtener un nombre o apellido válido
- std::string insertValidNameOrLastName(std::string stringToValidate, std::string insertMessage,
-     std::string warningMessage, std::string sucessMessage) {
+// Función para obtener un nombre o apellido válido
+std::string insertValidNameOrLastName(std::string stringToValidate, std::string insertMessage,
+    std::string warningMessage, std::string sucessMessage) {
 
 
-     showDefaultColorConsoleMessage();
-     bool isStringValid = false;
+    showDefaultColorConsoleMessage();
+    bool isStringValid = false;
 
-     // Mientras que el string no sea válido
-     // Se mostrará un mensaje de error y se le pedirá al
-     // Usuario que ingrese el valor nuevamente
-     while (!isStringValid) {
-         showDefaultColorConsoleMessage();
-         std::cout << insertMessage << std::endl;
-         std::cin >> stringToValidate;
+    // Mientras que el string no sea válido
+    // Se mostrará un mensaje de error y se le pedirá al
+    // Usuario que ingrese el valor nuevamente
+    while (!isStringValid) {
+        showDefaultColorConsoleMessage();
+        std::cout << insertMessage << std::endl;
+        std::cin >> stringToValidate;
 
-         // De lo contrario, la función regresa true
-         showGreenConsoleMessage();
-         if (isValidString(stringToValidate)) {
-             isStringValid = true;
-             std::cout << sucessMessage;
-         }
-         else {
-             // Se le pregunta al usuario si desea continuar
-             showRedConsoleMessage();
-             std::cout << warningMessage;
-             char answer;
-             std::cin >> answer;
-             if (answer == 'n' || answer == 'N') {
-                 break;
-             }
-         }
-     }
+        // De lo contrario, la función regresa true
+        showGreenConsoleMessage();
+        if (isValidString(stringToValidate)) {
+            isStringValid = true;
+            std::cout << sucessMessage;
+        }
+        else {
+            // Se le pregunta al usuario si desea continuar
+            showRedConsoleMessage();
+            std::cout << warningMessage;
+            char answer;
+            std::cin >> answer;
+            if (answer == 'n' || answer == 'N') {
+                break;
+            }
+        }
+    }
 
-     showDefaultColorConsoleMessage();
+    showDefaultColorConsoleMessage();
 
-     // Y se regresa el string
-     return stringToValidate;
- }
- 
- // Función para verificar si la cédula ingresada es válida (7 - 8 carácteres)
+    // Y se regresa el string
+    return stringToValidate;
+}
 
- // Verificación con while para repetir la pregunta hasta que el usuario
- // Coloque un valor válido
- bool isValidDocument(int& number) {
-     while (true) {
-         std::string numberString;
-         showDefaultColorConsoleMessage();
-         std::cout << "\nIngrese el numero de cedula: (7 - 8 caracteres) " << std::endl;
-         std::cin >> numberString;
+// Función para verificar si la cédula ingresada es válida (7 - 8 carácteres)
 
-         // Si se añade un número, se convierte a string
-         try {
-             number = std::stoi(numberString);
-         }
+// Verificación con while para repetir la pregunta hasta que el usuario
+// Coloque un valor válido
+bool isValidDocument(int& number) {
+    while (true) {
+        std::string numberString;
+        showDefaultColorConsoleMessage();
+        std::cout << "\nIngrese el numero de cedula: (7 - 8 caracteres) " << std::endl;
+        std::cin >> numberString;
 
-         // De lo contrario, se le pide al usuario que inserte un valor válido
-         // Puesto que ha ingresado un carácter que no es numérico
-         catch (const std::invalid_argument&) {
-             showRedConsoleMessage();
-             std::cout << "\nEl valor ingresado no es un numero valido. Por favor, intentelo de nuevo." << std::endl;
-             continue;
-         }
+        // Si se añade un número, se convierte a string
+        try {
+            number = std::stoi(numberString);
+        }
 
-         // Si se satisfacen las condiciones anteriores,
-         // El string se convierte a un número
-         std::string validNumberString = std::to_string(number);
+        // De lo contrario, se le pide al usuario que inserte un valor válido
+        // Puesto que ha ingresado un carácter que no es numérico
+        catch (const std::invalid_argument&) {
+            showRedConsoleMessage();
+            std::cout << "\nEl valor ingresado no es un numero valido. Por favor, intentelo de nuevo." << std::endl;
+            continue;
+        }
 
-         // Ahora, verificamos el tamaño del string numérico 
-         if (validNumberString.size() >= 7 && validNumberString.size() <= 8) {
-             return true;
-         }
+        // Si se satisfacen las condiciones anteriores,
+        // El string se convierte a un número
+        std::string validNumberString = std::to_string(number);
 
-         // Finalmente, si no se cumple con la condición dada, por que el número es o muy pequeño
-         // O muy grande, se le pide al usuario que intente de nuevo la selección
-         else {
-             showRedConsoleMessage();
-             std::cout << "\nEl numero debe tener entre 7 y 8 digitos. Por favor, intentelo de nuevo." << std::endl;
-             continue;
-         }
-     }
-     showDefaultColorConsoleMessage();
- }
+        // Ahora, verificamos el tamaño del string numérico 
+        if (validNumberString.size() >= 7 && validNumberString.size() <= 8) {
+            return true;
+        }
 
- // Función para verificar la edad del usuario (10 - 99)
- bool isAgeValid(int& age) {
-     while (true) {
+        // Finalmente, si no se cumple con la condición dada, por que el número es o muy pequeño
+        // O muy grande, se le pide al usuario que intente de nuevo la selección
+        else {
+            showRedConsoleMessage();
+            std::cout << "\nEl numero debe tener entre 7 y 8 digitos. Por favor, intentelo de nuevo." << std::endl;
+            continue;
+        }
+    }
+    showDefaultColorConsoleMessage();
+}
 
-     // Usamos la misma lógica de la función
-     // 'isValidDocument'
-     std::string numberString;
-     std::cout << "\nIngrese su edad: (10 - 99)" << std::endl;
-     std::cin >> numberString;
+// Función para verificar la edad del usuario (10 - 99)
+bool isAgeValid(int& age) {
+    while (true) {
 
-     try {
-         age = std::stoi(numberString);
-     }
-     catch (const std::invalid_argument&) {
-         std::cout << "El valor ingresado no es un numero valido. Por favor, intentelo de nuevo." << std::endl;
-         continue;
-     }
+        // Usamos la misma lógica de la función
+        // 'isValidDocument'
+        std::string numberString;
+        std::cout << "\nIngrese su edad: (10 - 99)" << std::endl;
+        std::cin >> numberString;
 
-     std::string validNumberString = std::to_string(age);
+        try {
+            age = std::stoi(numberString);
+        }
+        catch (const std::invalid_argument&) {
+            std::cout << "El valor ingresado no es un numero valido. Por favor, intentelo de nuevo." << std::endl;
+            continue;
+        }
 
-     if (validNumberString.size() == 2) {
-         return true;
-     }
-     else {
-         std::cout << "El número debe ser entre 10 y 99. Por favor, intentelo de nuevo." << std::endl;
-         continue;
-     }
-     }
- }
-     
- // FUNCIONES AUXILIARES
- 
- // Función para limpiar la pantalla
- bool cleanScreen(bool cleanScreenParameter) {
+        std::string validNumberString = std::to_string(age);
 
-     // system("cls") es un comando que nos permite
-     // Limpiar la consola dentro de C++ mediante 
-     // Proveniente del encabezado de <stdlib.h>
-     if (cleanScreenParameter) return system("cls");
- }
+        if (validNumberString.size() == 2) {
+            return true;
+        }
+        else {
+            std::cout << "El número debe ser entre 10 y 99. Por favor, intentelo de nuevo." << std::endl;
+            continue;
+        }
+    }
+}
+
+// FUNCIONES AUXILIARES
+
+// Función para limpiar la pantalla
+bool cleanScreen(bool cleanScreenParameter) {
+
+    // system("cls") es un comando que nos permite
+    // Limpiar la consola dentro de C++ mediante 
+    // Proveniente del encabezado de <stdlib.h>
+    if (cleanScreenParameter) return system("cls");
+}
 
 // Función para preguntar al usuario si desea limpiar la pantalla
 bool askForCleaningScreen() {
@@ -963,8 +964,8 @@ bool askForCleaningScreen() {
             }
         }
 
-    // Mientras que el usuario inserte un valor que 
-    // No sea válido
+        // Mientras que el usuario inserte un valor que 
+        // No sea válido
     } while (!validAnswer);
 
     // Se devuelve true si el usuario eligió limpiar la pantalla, de lo contrario false
@@ -974,92 +975,92 @@ bool askForCleaningScreen() {
 // MENÚ FAQ
 
 // Muestra de texto
- void getFAQ() {
-     std::cout << "-------------------------------------" << std::endl;
-     std::cout << "1) De que trata nuestra aplicacion?" << std::endl;
-     std::cout << "\nNuestra aplicacion dentro de la consola de C++ trata sobre un sistema de organizacion de tareas para la UBA. El cual esta basado en distintas aplicaciones como Notion y TickTick. A pesar de las limitaciones por la falta de una  GUI (Interfaz de usuario) hemos podido implementar funciones complejas como agregar 3 pensum enteros de nuestra universidad, agregar menciones, crear tareas, convertir estas a PDF e incluso incluir secciones como esta y la de Pomodoro.\n" << std::endl;
-     std::cout << "-------------------------------------" << std::endl;
-     std::cout << "\n2) Para quien esta pensada esta aplicacion?" << std::endl;
-     std::cout << "\nNuestra aplicacion esta pensada para estudiantes de la UBA que busquen organizar dentro de las fechas de entrega para que posteriormente puedan hacer sus horarios y calendarios.\n" << std::endl;
-     std::cout << "-------------------------------------" << std::endl;
-     std::cout << "\n3) Que podemos hacer aqui?" << std::endl;
-     std::cout << "\nNo solamente pensamos en estudiantes de nuestra universidad sino en personas que quieren entretenerse o usar otras herramientas de productividad como el pomodoro.\n" << std::endl;
-     std::cout << "-------------------------------------" << std::endl;
-     std::cout << "\n4) El orden de las tareas a agregar es lineal?" << std::endl;
-     std::cout << "\nSi! Realizamos este enfoque para llevar un orden coherente de las actividades sumativas a agregar sin dejar ninguna materia atras. No querras olvidarte de alguna tarea, no?\n" << std::endl;
-     std::cout << "-------------------------------------" << std::endl;
-     std::cout << "\n4) Que tecnologias se usaron?" << std::endl;
-     std::cout << "\nComo lenguaje de programacion, utilizamos 'C++' junto con la libreria de Libharu, la cual es una libreria de codigo abierto para generar archivos '.pdf'.\n" << std::endl;
-     std::cout << "-------------------------------------" << std::endl;
- }
+void getFAQ() {
+    std::cout << "-------------------------------------" << std::endl;
+    std::cout << "1) De que trata nuestra aplicacion?" << std::endl;
+    std::cout << "\nNuestra aplicacion dentro de la consola de C++ trata sobre un sistema de organizacion de tareas para la UBA. El cual esta basado en distintas aplicaciones como Notion y TickTick. A pesar de las limitaciones por la falta de una  GUI (Interfaz de usuario) hemos podido implementar funciones complejas como agregar 3 pensum enteros de nuestra universidad, agregar menciones, crear tareas, convertir estas a PDF e incluso incluir secciones como esta y la de Pomodoro.\n" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
+    std::cout << "\n2) Para quien esta pensada esta aplicacion?" << std::endl;
+    std::cout << "\nNuestra aplicacion esta pensada para estudiantes de la UBA que busquen organizar dentro de las fechas de entrega para que posteriormente puedan hacer sus horarios y calendarios.\n" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
+    std::cout << "\n3) Que podemos hacer aqui?" << std::endl;
+    std::cout << "\nNo solamente pensamos en estudiantes de nuestra universidad sino en personas que quieren entretenerse o usar otras herramientas de productividad como el pomodoro.\n" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
+    std::cout << "\n4) El orden de las tareas a agregar es lineal?" << std::endl;
+    std::cout << "\nSi! Realizamos este enfoque para llevar un orden coherente de las actividades sumativas a agregar sin dejar ninguna materia atras. No querras olvidarte de alguna tarea, no?\n" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
+    std::cout << "\n4) Que tecnologias se usaron?" << std::endl;
+    std::cout << "\nComo lenguaje de programacion, utilizamos 'C++' junto con la libreria de Libharu, la cual es una libreria de codigo abierto para generar archivos '.pdf'.\n" << std::endl;
+    std::cout << "-------------------------------------" << std::endl;
+}
 
- // Función principal para obtener la mención
- Mention getUserMention(int careerNumber) {
+// Función principal para obtener la mención
+Mention getUserMention(int careerNumber) {
 
-     std::cout << "\n--------------------------------------------------------------" << std::endl;
-     std::cout << "Ingrese el numero correspondiente a la mencion de su carrera:" << std::endl;
-     std::cout << "Recuerde, que estas afectaran a su pensum desde el 8vo trimestre." << std::endl;
+    std::cout << "\n--------------------------------------------------------------" << std::endl;
+    std::cout << "Ingrese el numero correspondiente a la mencion de su carrera:" << std::endl;
+    std::cout << "Recuerde, que estas afectaran a su pensum desde el 8vo trimestre." << std::endl;
 
-     // Se crea un vector de menciones, y dependiendo del número elegido
-     // Se asignarán datos diferentes
-     // Es por ende que se realizaron una serie extendida de verificaciones a la hora
-     // De obtener la carrera seleccionada por el usuario
-     std::vector<Mention> mentions;
-     if (careerNumber == 1) {
-         mentions = { {0, "General"}, {1, "Programacion"}, {2, "Inteligencia Artificial"}, {3, "Biomedica"} };
-     }
-     else if (careerNumber == 2) {
-         mentions = { {0, "General"}, {1, "Educativa"}, {2, "Clinica"}, {3, "Organizacional"} };
-     }
-     else if (careerNumber == 3) {
-         mentions = { {0, "General"}, {1, "Telecomunicaciones"}, {2, "Metrologia"}, {3, "Biomedica"} };
-     }
-     else {
-         std::cout << "Carrera invalida!" << std::endl;
-         return { -1, "" };
-     }
+    // Se crea un vector de menciones, y dependiendo del número elegido
+    // Se asignarán datos diferentes
+    // Es por ende que se realizaron una serie extendida de verificaciones a la hora
+    // De obtener la carrera seleccionada por el usuario
+    std::vector<Mention> mentions;
+    if (careerNumber == 1) {
+        mentions = { {0, "General"}, {1, "Programacion"}, {2, "Inteligencia Artificial"}, {3, "Biomedica"} };
+    }
+    else if (careerNumber == 2) {
+        mentions = { {0, "General"}, {1, "Educativa"}, {2, "Clinica"}, {3, "Organizacional"} };
+    }
+    else if (careerNumber == 3) {
+        mentions = { {0, "General"}, {1, "Telecomunicaciones"}, {2, "Metrologia"}, {3, "Biomedica"} };
+    }
+    else {
+        std::cout << "Carrera invalida!" << std::endl;
+        return { -1, "" };
+    }
 
-     for (const Mention& mention : mentions) {
-         std::cout << "Presione " << "'" << mention.number << "'" << " y 'enter' para elegir la mencion de " << mention.name << std::endl;
-     }
+    for (const Mention& mention : mentions) {
+        std::cout << "Presione " << "'" << mention.number << "'" << " y 'enter' para elegir la mencion de " << mention.name << std::endl;
+    }
 
-     int mentionInput;
-     std::cin >> mentionInput;
+    int mentionInput;
+    std::cin >> mentionInput;
 
-     while (std::cin.fail() || mentionInput < 0 || mentionInput >= mentions.size()) {
-         std::cin.clear();
-         std::cin.ignore(256, '\n');
-         showRedConsoleMessage();
-         std::cout << "Entrada inválida. Por favor, ingrese un numero valido correspondiente a una de las menciones mostradas." << std::endl;
-         std::cin >> mentionInput;
-     }
-     showDefaultColorConsoleMessage();
-     std::cout << "\nUsted ha escogido la mencion de " << mentions[mentionInput].name << "!" << std::endl;
-     return mentions[mentionInput];
- }
+    while (std::cin.fail() || mentionInput < 0 || mentionInput >= mentions.size()) {
+        std::cin.clear();
+        std::cin.ignore(256, '\n');
+        showRedConsoleMessage();
+        std::cout << "Entrada inválida. Por favor, ingrese un numero valido correspondiente a una de las menciones mostradas." << std::endl;
+        std::cin >> mentionInput;
+    }
+    showDefaultColorConsoleMessage();
+    std::cout << "\nUsted ha escogido la mencion de " << mentions[mentionInput].name << "!" << std::endl;
+    return mentions[mentionInput];
+}
 
- // Mostrar la información del usuario a la hora de añadir las tareas
- void showUserSelectedAndAddedOptions(int selectedCareerNumber, int selectedQuarterNumber,
-     std::string userSelectedName, std::string userSelectedLastName,
-     const std::vector<std::string>& careers, Mention userMention) {
+// Mostrar la información del usuario a la hora de añadir las tareas
+void showUserSelectedAndAddedOptions(int selectedCareerNumber, int selectedQuarterNumber,
+    std::string userSelectedName, std::string userSelectedLastName,
+    const std::vector<std::string>& careers, Mention userMention) {
 
 
 
-     const std::string& career = careers[selectedCareerNumber - 1];
+    const std::string& career = careers[selectedCareerNumber - 1];
 
-     showDefaultColorConsoleMessage();
-     std::cout << "Resumen de sus datos:\n";
-     std::cout << "Nombre completo: " << userSelectedName << " " << userSelectedLastName << "\n";
-     std::cout << "Numero de trimestre seleccionado: " << selectedQuarterNumber << "\n";
-     std::cout << "Carrera elegida: " << career << "\n";
-     std::cout << "Mencion elegida: " << userMention.name << "\n";
-     std::cout << "Numero de la mencion elegida: " << userMention.number << "\n";
- }
+    showDefaultColorConsoleMessage();
+    std::cout << "Resumen de sus datos:\n";
+    std::cout << "Nombre completo: " << userSelectedName << " " << userSelectedLastName << "\n";
+    std::cout << "Numero de trimestre seleccionado: " << selectedQuarterNumber << "\n";
+    std::cout << "Carrera elegida: " << career << "\n";
+    std::cout << "Mencion elegida: " << userMention.name << "\n";
+    std::cout << "Numero de la mencion elegida: " << userMention.number << "\n";
+}
 
 // CONSTANTES A UTILIZAR POR EL SISTEMA
 
 const int MAX_QUARTERS = 12;
-const int subjectsWidth = 30; 
+const int subjectsWidth = 30;
 const int creditsWidth = 10;
 
 // Los valores de subjectsWidth y creditsWidth, indican
@@ -1144,14 +1145,14 @@ int main()
         // Del menú principal
         switch (mainMenuUserChoice) {
         case 2:
-            {
-                getFAQ();
-                int uwu;
-                std::cout << "Presione cualquier tecla y 'enter' para salir" << std::endl;
-                std::cin >> uwu;
-                keep_running = true;
-                break;
-            }
+        {
+            getFAQ();
+            int uwu;
+            std::cout << "Presione cualquier tecla y 'enter' para salir" << std::endl;
+            std::cin >> uwu;
+            keep_running = true;
+            break;
+        }
 
 
         // Ejecutando el pomodoro 
@@ -1175,7 +1176,7 @@ int main()
             std::cin >> uwu;
             break;
         }
-    
+
         // Si el usuario presiona 1, va a 
         // Las opciones para añadir tareas, ver Pensum
         // Mostrar las tareas al final y convertir
@@ -1283,15 +1284,11 @@ int main()
         }
         return 0;
     }
-    }
+}
 #undef max
 
 
 
-    
-
-
-   
 
 
 
@@ -1299,8 +1296,11 @@ int main()
 
 
 
-   
 
-    
 
- 
+
+
+
+
+
+
